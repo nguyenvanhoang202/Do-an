@@ -66,7 +66,6 @@ class _OrdersTabState extends State<OrdersTab> {
           storesData.forEach((key, value) {
             stores[key.toString()] = Store(
               id: key.toString(),
-
               name: value['name'] ?? '',
               description: value['description'] ?? '',
               phoneNumber: value['phoneNumber'] ?? '',
@@ -85,27 +84,33 @@ class _OrdersTabState extends State<OrdersTab> {
             final storeId = orderData['storeId']?.toString();
             final userId = orderData['userId']?.toString();
 
-            print(
-                'Processing order: ${entry.key}, storeId: $storeId, userId: $userId');
+            print('Processing order: ${entry.key}, storeId: $storeId, userId: $userId');
 
             if (storeId != null && userId != null) {
               final store = stores[storeId];
               final user = users[userId];
 
               if (store != null && user != null) {
+                // Xử lý trạng thái đơn hàng
+                String status = orderData['status']?.toString()?.toLowerCase() ?? '';
+                String displayStatus = status;
+
+                // Nếu trạng thái là 'mới' hoặc rỗng, hiển thị là 'chờ xác nhận'
+                if (status.isEmpty || status == 'mới') {
+                  displayStatus = 'chờ xác nhận';
+                }
+
                 final order = Order(
                   id: entry.key,
                   user: user,
                   store: store,
                   note: orderData['note']?.toString(),
-                  status: orderData['status']?.toString() ?? '',
+                  status: displayStatus, // Sử dụng trạng thái hiển thị
                   paymentMethod: PaymentMethod.cashOnDelivery,
                   totalAmount: (orderData['totalAmount'] as num).toDouble(),
-                  shippingFee:
-                      (orderData['shippingFee'] as num?)?.toDouble() ?? 0.0,
+                  shippingFee: (orderData['shippingFee'] as num?)?.toDouble() ?? 0.0,
                   recipientName: orderData['recipientName']?.toString() ?? '',
-                  recipientAddress:
-                      orderData['recipientAddress']?.toString() ?? '',
+                  recipientAddress: orderData['recipientAddress']?.toString() ?? '',
                   createdAt: orderData['createdAt'] as int,
                 );
                 loadedOrders.add(order);
@@ -135,8 +140,10 @@ class _OrdersTabState extends State<OrdersTab> {
         return Colors.red;
       case 'đang giao':
         return Colors.blue;
+      case 'chờ xác nhận':
+        return Colors.orange; // Màu cam cho trạng thái chờ xác nhận
       default:
-        return Colors.orange;
+        return Colors.grey; // Màu xám cho các trạng thái khác
     }
   }
 
@@ -148,8 +155,10 @@ class _OrdersTabState extends State<OrdersTab> {
         return Icons.cancel;
       case 'đang giao':
         return Icons.local_shipping;
+      case 'chờ xác nhận':
+        return Icons.access_time; // Icon đồng hồ cho chờ xác nhận
       default:
-        return Icons.access_time;
+        return Icons.help_outline; // Icon dấu hỏi cho các trạng thái khác
     }
   }
 
@@ -159,152 +168,104 @@ class _OrdersTabState extends State<OrdersTab> {
       color: Colors.grey[100],
       child: orders.isEmpty
           ? Center(
-              child: Text('Chưa có đơn hàng nào'),
-            )
+        child: Text('Chưa có đơn hàng nào'),
+      )
           : ListView.builder(
-              padding: EdgeInsets.all(16.0),
-              itemCount: orders.length,
-              itemBuilder: (context, index) {
-                final order = orders[index];
-                final statusColor = _getStatusColor(order.status);
-                final statusIcon = _getStatusIcon(order.status);
+        padding: EdgeInsets.all(16.0),
+        itemCount: orders.length,
+        itemBuilder: (context, index) {
+          final order = orders[index];
+          final statusColor = _getStatusColor(order.status);
+          final statusIcon = _getStatusIcon(order.status);
 
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 1,
-                          blurRadius: 10,
-                          offset: Offset(0, 2),
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 10,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderDetailScreen(order: order),
                         ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    OrderDetailScreen(order: order),
-                              ),
-                            );
-                          },
-                          child: Column(
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(16.0),
+                          child: Row(
                             children: [
                               Container(
-                                padding: EdgeInsets.all(16.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                        color: statusColor.withOpacity(0.1),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                        statusIcon,
-                                        color: statusColor,
-                                        size: 24,
-                                      ),
-                                    ),
-                                    SizedBox(width: 16),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Đơn hàng ${order.id.substring(0, 8)}',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 12,
-                                                  vertical: 6,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: statusColor
-                                                      .withOpacity(0.1),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                child: Text(
-                                                  order.status,
-                                                  style: TextStyle(
-                                                    color: statusColor,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            DateFormat('dd/MM/yyyy HH:mm')
-                                                .format(DateTime
-                                                    .fromMillisecondsSinceEpoch(
-                                                        order.createdAt)),
-                                            style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: statusColor.withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  statusIcon,
+                                  color: statusColor,
+                                  size: 24,
                                 ),
                               ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[50],
-                                  border: Border(
-                                    top: BorderSide(
-                                      color: Colors.grey[200]!,
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Đơn hàng ${order.id.substring(0, 8)}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 6,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: statusColor.withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: Text(
+                                            order.status,
+                                            style: TextStyle(
+                                              color: statusColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 8),
                                     Text(
-                                      'Cửa hàng: ${order.store.name}',
+                                      DateFormat('dd/MM/yyyy HH:mm')
+                                          .format(DateTime.fromMillisecondsSinceEpoch(order.createdAt)),
                                       style: TextStyle(
                                         color: Colors.grey[600],
                                         fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      NumberFormat.currency(
-                                        locale: 'vi_VN',
-                                        symbol: '₫',
-                                        decimalDigits: 0,
-                                      ).format(order.totalAmount),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.black87,
                                       ),
                                     ),
                                   ],
@@ -313,12 +274,51 @@ class _OrdersTabState extends State<OrdersTab> {
                             ],
                           ),
                         ),
-                      ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[50],
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.grey[200]!,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Cửa hàng: ${order.store.name}',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Text(
+                                NumberFormat.currency(
+                                  locale: 'vi_VN',
+                                  symbol: '₫',
+                                  decimalDigits: 0,
+                                ).format(order.totalAmount),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
+                ),
+              ),
             ),
+          );
+        },
+      ),
     );
   }
 }

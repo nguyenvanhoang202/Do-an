@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'order/incomeStore.dart';
+import 'order/listoderStore.dart';
 import 'productStore.dart';
 import 'profile/Storeprofilescreen.dart';
 import 'storeInfor.dart';
@@ -29,12 +31,10 @@ class _StoreHomePageState extends State<StoreHomePage> with SingleTickerProvider
       body: TabBarView(
         controller: _tabController,
         children: [
-          // StoreInfoTab()
-          // MenuTab(),
-          // OrdersTab(),
-          // IncomeTab(),
           StoreInfoScreen(),
           ProductListScreen(),
+          StoreOrdersScreen(),
+          RevenueStatisticsScreen(),
           StoreProfileScreen(),
         ],
       ),

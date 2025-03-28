@@ -69,7 +69,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         'userId': widget.cart.user.id,
         'storeId': storeId,
         'note': _note,
-        'status': 'đang giao',
+        'status': 'mới', // Đã sửa từ 'đang giao' thành 'mới'
         'paymentMethod': PaymentMethod.cashOnDelivery.toString(),
         'totalAmount': widget.totalAmount,
         'shippingFee': 0,
