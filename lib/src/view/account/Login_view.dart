@@ -19,7 +19,6 @@ class _LoginScreenState extends State<Login> {
   bool isChecked = false;
   bool _isLoading = false;
 
-  // Keys for SharedPreferences
   static const String REMEMBER_KEY = 'remember_login';
   static const String USERNAME_KEY = 'saved_username';
   static const String PASSWORD_KEY = 'saved_password';
@@ -30,7 +29,6 @@ class _LoginScreenState extends State<Login> {
     _loadSavedCredentials();
   }
 
-  // Load saved credentials when app starts
   Future<void> _loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -42,7 +40,6 @@ class _LoginScreenState extends State<Login> {
     });
   }
 
-  // Save credentials
   Future<void> _saveCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     if (isChecked) {
@@ -50,7 +47,6 @@ class _LoginScreenState extends State<Login> {
       await prefs.setString(PASSWORD_KEY, _passwordController.text);
       await prefs.setBool(REMEMBER_KEY, true);
     } else {
-      // Clear saved credentials if remember is unchecked
       await prefs.remove(USERNAME_KEY);
       await prefs.remove(PASSWORD_KEY);
       await prefs.setBool(REMEMBER_KEY, false);
@@ -82,18 +78,13 @@ class _LoginScreenState extends State<Login> {
           (success, errorMessage, userCredential) async {
         if (success && userCredential != null) {
           String uid = userCredential.user!.uid;
-
-          // Gọi Firebase để lấy position
           int position = await _auth.getUserPosition(uid);
-
-          // Lưu thông tin đăng nhập nếu remember được bật
           await _saveCredentials();
 
           setState(() {
             _isLoading = false;
           });
 
-          // Điều hướng theo position
           if (position == 2) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => StoreHomePage()),
@@ -112,148 +103,171 @@ class _LoginScreenState extends State<Login> {
       },
     );
   }
-  void _navigateToForgotPassword() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Forgotpass()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Đăng nhập'),
-        automaticallyImplyLeading: false,
-      ),
       body: Stack(
         children: [
-          // Background image
+          // Background
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/img/background(1).jpg'),
+                image: AssetImage('assets/img/background6.png'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  SizedBox(height: 10),
                   Image.asset(
-                    'assets/img/logo1.jpg',
-                    width: 400,
-                    height: 300,
-                  ),
-                  SizedBox(height: 20.0),
-                  TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      labelText: 'Email hoặc số điện thoại',
-                      filled: true,
-                      fillColor: Colors.orangeAccent[100],
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(color: Colors.orange, width: 2.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(color: Colors.orange, width: 3.0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20.0),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Mật khẩu',
-                      filled: true,
-                      fillColor: Colors.orangeAccent[100],
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(color: Colors.orange, width: 2.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(color: Colors.orange, width: 3.0),
-                      ),
-                    ),
-                    obscureText: true,
+                    'assets/img/logo4.png',
+                    width: 200,
+                    height: 200,
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CheckboxListTile(
-                          title: Text("Remember"),
-                          value: isChecked,
-                          onChanged: (newValue) {
-                            setState(() {
-                              isChecked = newValue!;
-                              if (!isChecked) {
-                                // Clear saved credentials when unchecked
-                                _saveCredentials();
-                              }
-                            });
-                          },
-                          controlAffinity: ListTileControlAffinity.leading,
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.95),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
                         ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Forgotpass()),
-                          );
-                        },
-                        child: Text("Forgot Password?"),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.resolveWith<Color>((states) {
-                        return Colors.orange;
-                      }),
-                      foregroundColor:
-                      MaterialStateProperty.resolveWith<Color>((states) {
-                        return Colors.white;
-                      }),
+                      ],
                     ),
-                    onPressed: _login,
-                    child: Text('Đăng nhập'),
-                  ),
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                    child: RichText(
-                      text: TextSpan(
-                        text: "New user? ",
-                        style: TextStyle(color: Color(0xff606470), fontSize: 16),
-                        children: <TextSpan>[
-                          TextSpan(
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Center(
+                          child: Text(
+                            "Đăng nhập",
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 25),
+
+                        // Email/username
+                        TextField(
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                            labelText: 'Email hoặc số điện thoại',
+                            prefixIcon: Icon(Icons.person, color: Colors.orange),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange, width: 2),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 25),
+
+                        // Password
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Mật khẩu',
+                            prefixIcon: Icon(Icons.lock, color: Colors.orange),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange, width: 2),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 15),
+
+                        // Remember + Forgot password
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: isChecked,
+                                  activeColor: Colors.orange,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isChecked = value!;
+                                      if (!isChecked) {
+                                        _saveCredentials();
+                                      }
+                                    });
+                                  },
+                                ),
+                                Text("Remember"),
+                              ],
+                            ),
+                            TextButton(
+                              onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Register(),
-                                  ),
+                                  MaterialPageRoute(builder: (context) => Forgotpass()),
                                 );
                               },
-                            text: "Sign up for a new account",
-                            style:
-                            TextStyle(color: Color(0xff3277D8), fontSize: 16),
+                              child: Text(
+                                "Forgot Password?",
+                                style: TextStyle(color: Colors.orange),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+
+                        // Nút đăng nhập
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange,
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
                           ),
-                        ],
-                      ),
+                          onPressed: _login,
+                          child: Text(
+                            'Đăng nhập',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        SizedBox(height: 30),
+
+                        // Đăng ký
+                        Center(
+                          child: RichText(
+                            text: TextSpan(
+                              text: "New user? ",
+                              style: TextStyle(color: Color(0xff606470), fontSize: 16),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Register(),
+                                        ),
+                                      );
+                                    },
+                                  text: "Sign up for a new account",
+                                  style: TextStyle(color: Color(0xff3277D8), fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  SizedBox(height: 60), // thêm khoảng trống cuối trang
                 ],
               ),
             ),
@@ -261,14 +275,13 @@ class _LoginScreenState extends State<Login> {
           if (_isLoading)
             Container(
               color: Colors.black54,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: Center(child: CircularProgressIndicator()),
             ),
         ],
       ),
     );
   }
+
 
   @override
   void dispose() {
