@@ -1,3 +1,3 @@
-# flutter_application_2
+# flutter_application_foodapp
 
 A new Flutter project.
