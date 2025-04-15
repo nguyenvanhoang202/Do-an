@@ -178,7 +178,7 @@ class ProductInfoSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Store section
+          // Store section (giữ nguyên như cũ)
           InkWell(
             onTap: () async {
               final storeSnapshot = await FirebaseDatabase.instance
@@ -189,7 +189,7 @@ class ProductInfoSection extends StatelessWidget {
 
               if (storeSnapshot.exists && context.mounted) {
                 final storeData =
-                    Map<String, dynamic>.from(storeSnapshot.value as Map);
+                Map<String, dynamic>.from(storeSnapshot.value as Map);
                 storeData['id'] = product.store.id;
 
                 final store = Store(
@@ -222,7 +222,6 @@ class ProductInfoSection extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  // Store Image
                   Container(
                     width: 60,
                     height: 60,
@@ -230,9 +229,9 @@ class ProductInfoSection extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       image: product.store.image != null
                           ? DecorationImage(
-                              image: NetworkImage(product.store.image!),
-                              fit: BoxFit.cover,
-                            )
+                        image: NetworkImage(product.store.image!),
+                        fit: BoxFit.cover,
+                      )
                           : null,
                     ),
                     child: product.store.image == null
@@ -240,7 +239,6 @@ class ProductInfoSection extends StatelessWidget {
                         : null,
                   ),
                   const SizedBox(width: 12),
-                  // Store Info
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,23 +305,10 @@ class ProductInfoSection extends StatelessWidget {
                   ],
                 ),
               ),
-              // Add to Cart IconButton
-              Container(
-                decoration: BoxDecoration(
-                  color: themeColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: IconButton(
-                  onPressed: () => _addToCart(context),
-                  icon: const Icon(
-                    Icons.add_shopping_cart,
-                    color: Colors.white,
-                  ),
-                  tooltip: 'Thêm vào giỏ hàng',
-                ),
-              ),
             ],
           ),
+          const SizedBox(height: 16),
+          // Thêm hàng mới chứa nút "Mua ngay" và "Thêm vào giỏ hàng"
           const SizedBox(height: 16),
           Text(
             product.description,
@@ -333,21 +318,75 @@ class ProductInfoSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Price
-          Text(
-            'Giá',
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16,
-            ),
+          // Price - Hiển thị ngang
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              RichText(
+                text: TextSpan(
+                  style: DefaultTextStyle.of(context).style,
+                  children: [
+                    TextSpan(
+                      text: 'Giá: ',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 16,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '${product.price.toStringAsFixed(0)}₫',
+                      style: TextStyle(
+                        color: themeColor,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
-          Text(
-            '${product.price.toStringAsFixed(0)}₫',
-            style: TextStyle(
-              color: themeColor,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children: [
+              // Nút "Mua ngay"
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => _buyNow(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: themeColor,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Mua ngay',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              // Nút "Thêm vào giỏ hàng" (đã điều chỉnh lại)
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: themeColor, width:3.0),
+                ),
+                child: IconButton(
+                  onPressed: () => _addToCart(context),
+                  icon: Icon(
+                    Icons.add_shopping_cart,
+                    color: themeColor,
+                  ),
+                  tooltip: 'Thêm vào giỏ hàng',
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -386,6 +425,36 @@ class ProductInfoSection extends StatelessWidget {
           ),
         ),
       );
+    }
+  }
+
+  void _buyNow(BuildContext context) async {
+    try {
+      if (product.id.isEmpty) {
+        throw Exception('Product ID không hợp lệ');
+      }
+
+      // Thêm sản phẩm vào giỏ hàng
+      await _cartService.addToCart(product, quantity);
+
+      // Chuyển ngay đến màn hình giỏ hàng
+      if (context.mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CartScreen(),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Lỗi khi mua hàng: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 }

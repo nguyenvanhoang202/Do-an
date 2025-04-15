@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import '../../model/order.dart';
 import '../../model/user.dart' as app_user;
-import '../../view/feedback/feedbackScreen.dart';
 
 class StoreOrderDetailScreen extends StatefulWidget {
   final Order order;
@@ -87,21 +86,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
         SnackBar(content: Text('Đã cập nhật trạng thái thành công!')),
       );
 
-      setState(() {
-        widget.order.status = newStatus;
-      });
-
-      if (newStatus == 'đã giao') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FeedbackScreen(
-              order: widget.order,
-              orderItems: orderItems,
-            ),
-          ),
-        );
-      }
+      Navigator.pop(context, true);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Lỗi khi cập nhật: ${e.toString()}')),
@@ -295,6 +280,8 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                       ],
                     ),
                     SizedBox(height: 20),
+
+                    // Nút cho đơn mới
                     if (widget.order.status == 'mới')
                       Row(
                         children: [
@@ -306,7 +293,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                                 padding: EdgeInsets.symmetric(vertical: 12),
                               ),
                               child: Text(
-                                'Từ chối',
+                                'Hủy đơn',
                                 style: TextStyle(color: Colors.red),
                               ),
                             ),
@@ -314,7 +301,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                           SizedBox(width: 16),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () => _updateOrderStatus('đang giao'),
+                              onPressed: () => _updateOrderStatus('đang xử lý'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
                                 padding: EdgeInsets.symmetric(vertical: 12),
@@ -324,6 +311,35 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                           ),
                         ],
                       ),
+
+                    // Nút cho đơn đang xử lý
+                    if (widget.order.status == 'đang xử lý')
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () => _updateOrderStatus('đang giao'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              minimumSize: Size(double.infinity, 48),
+                            ),
+                            child: Text('Đã giao cho tài xế'),
+                          ),
+                          SizedBox(height: 10),
+                          OutlinedButton(
+                            onPressed: () => _updateOrderStatus('đã hủy'),
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: Colors.red),
+                              minimumSize: Size(double.infinity, 48),
+                            ),
+                            child: Text(
+                              'Hủy đơn',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                    // Nút cho đơn đang giao
                     if (widget.order.status == 'đang giao')
                       ElevatedButton(
                         onPressed: () => _updateOrderStatus('đã giao'),
@@ -371,36 +387,6 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
     );
   }
 
-  Widget _buildTotalRow(String label, double amount, {bool isTotal = false}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: isTotal ? 16 : 14,
-            ),
-          ),
-          Text(
-            NumberFormat.currency(
-              locale: 'vi_VN',
-              symbol: '₫',
-              decimalDigits: 0,
-            ).format(amount),
-            style: TextStyle(
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              fontSize: isTotal ? 16 : 14,
-              color: isTotal ? Colors.red : Colors.black,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'đã giao':
@@ -409,6 +395,8 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
         return Colors.red;
       case 'đang giao':
         return Colors.blue;
+      case 'đang xử lý':
+        return Colors.orange;
       case 'mới':
         return Colors.orange;
       default:
@@ -424,6 +412,8 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
         return Icons.cancel;
       case 'đang giao':
         return Icons.local_shipping;
+      case 'đang xử lý':
+        return Icons.hourglass_top;
       case 'mới':
         return Icons.access_time;
       default:

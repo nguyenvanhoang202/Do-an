@@ -127,7 +127,7 @@ class _LocationPickerState extends State<LocationPicker> {
             child: FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                initialCenter: const LatLng(10.762622, 106.660172),
+                initialCenter: const LatLng(21.0285, 105.8542),
                 // Tọa độ TP.HCM
                 initialZoom: 14,
                 onTap: _handleTapMap,

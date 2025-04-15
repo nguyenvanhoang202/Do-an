@@ -12,14 +12,19 @@ class OrdersTab extends StatefulWidget {
   _OrdersTabState createState() => _OrdersTabState();
 }
 
-class _OrdersTabState extends State<OrdersTab> {
+class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
   final _database = FirebaseDatabase.instance.ref();
   final _auth = FirebaseAuth.instance;
-  List<Order> orders = [];
+  late TabController _tabController;
+  List<Order> _activeOrders = [];
+  List<Order> _completedOrders = [];
+  List<Order> _canceledOrders = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 3, vsync: this);
     _loadOrders();
   }
 
@@ -34,7 +39,11 @@ class _OrdersTabState extends State<OrdersTab> {
         .onValue
         .listen((event) async {
       if (event.snapshot.value == null) {
-        setState(() => orders = []);
+        setState(() {
+          _activeOrders = [];
+          _completedOrders = [];
+          _canceledOrders = [];
+        });
         return;
       }
 
@@ -105,7 +114,7 @@ class _OrdersTabState extends State<OrdersTab> {
                   user: user,
                   store: store,
                   note: orderData['note']?.toString(),
-                  status: displayStatus, // Sử dụng trạng thái hiển thị
+                  status: displayStatus,
                   paymentMethod: PaymentMethod.cashOnDelivery,
                   totalAmount: (orderData['totalAmount'] as num).toDouble(),
                   shippingFee: (orderData['shippingFee'] as num?)?.toDouble() ?? 0.0,
@@ -124,12 +133,172 @@ class _OrdersTabState extends State<OrdersTab> {
         // Sắp xếp theo thời gian mới nhất
         loadedOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-        setState(() => orders = loadedOrders);
+        // Phân loại đơn hàng
+        setState(() {
+          _activeOrders = loadedOrders.where((o) =>
+          o.status == 'chờ xác nhận' || o.status == 'đang giao').toList();
+          _completedOrders = loadedOrders.where((o) =>
+          o.status == 'đã giao').toList();
+          _canceledOrders = loadedOrders.where((o) =>
+          o.status == 'đã hủy').toList();
+          _isLoading = false;
+        });
+
         print('Loaded ${loadedOrders.length} orders');
       } catch (e) {
         print('Error loading orders: $e');
+        setState(() => _isLoading = false);
       }
     });
+  }
+
+  Future<String?> _getFirstProductImage(String orderId) async {
+    try {
+      final snapshot = await _database.child('orderItems').child(orderId).get();
+      if (snapshot.value != null) {
+        final items = (snapshot.value as Map<dynamic, dynamic>).values;
+        if (items.isNotEmpty) {
+          final firstItem = items.first;
+          final productId = firstItem['productId']?.toString();
+          if (productId != null) {
+            final productSnapshot = await _database.child('products').child(productId).get();
+            return productSnapshot.child('image').value?.toString();
+          }
+        }
+      }
+    } catch (e) {
+      print('Error getting product image: $e');
+    }
+    return null;
+  }
+
+  Future<String?> _getFirstProductName(String orderId) async {
+    try {
+      final snapshot = await _database.child('orderItems').child(orderId).get();
+      if (snapshot.value != null) {
+        final items = (snapshot.value as Map<dynamic, dynamic>).values;
+        if (items.isNotEmpty) {
+          final firstItem = items.first;
+          final productId = firstItem['productId']?.toString();
+          if (productId != null) {
+            final productSnapshot = await _database.child('products').child(productId).get();
+            return productSnapshot.child('name').value?.toString();
+          }
+        }
+      }
+    } catch (e) {
+      print('Error getting product name: $e');
+    }
+    return null;
+  }
+
+  Widget _buildOrderItem(Order order) {
+    return FutureBuilder(
+      future: Future.wait([
+        _getFirstProductImage(order.id),
+        _getFirstProductName(order.id),
+      ]),
+      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+        final productImage = snapshot.hasData ? snapshot.data![0] as String? : null;
+        final productName = snapshot.hasData ? snapshot.data![1] as String? : 'Đang tải...';
+
+        return Card(
+          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OrderDetailScreen(order: order),
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  // Ảnh sản phẩm
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[200],
+                      image: productImage != null
+                          ? DecorationImage(
+                        image: NetworkImage(productImage),
+                        fit: BoxFit.cover,
+                      )
+                          : null,
+                    ),
+                    child: productImage == null
+                        ? Icon(Icons.fastfood, color: Colors.grey)
+                        : null,
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          productName ?? 'Không có tên sản phẩm',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Mã đơn: ${order.id.substring(0, 8)}',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          DateFormat('dd/MM/yyyy HH:mm').format(
+                              DateTime.fromMillisecondsSinceEpoch(order.createdAt)),
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: _getStatusColor(order.status).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                order.status,
+                                style: TextStyle(
+                                  color: _getStatusColor(order.status),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              NumberFormat.currency(
+                                locale: 'vi_VN',
+                                symbol: '₫',
+                              ).format(order.totalAmount),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Color _getStatusColor(String status) {
@@ -141,183 +310,73 @@ class _OrdersTabState extends State<OrdersTab> {
       case 'đang giao':
         return Colors.blue;
       case 'chờ xác nhận':
-        return Colors.orange; // Màu cam cho trạng thái chờ xác nhận
+        return Colors.orange;
       default:
-        return Colors.grey; // Màu xám cho các trạng thái khác
-    }
-  }
-
-  IconData _getStatusIcon(String status) {
-    switch (status.toLowerCase()) {
-      case 'đã giao':
-        return Icons.check_circle;
-      case 'đã hủy':
-        return Icons.cancel;
-      case 'đang giao':
-        return Icons.local_shipping;
-      case 'chờ xác nhận':
-        return Icons.access_time; // Icon đồng hồ cho chờ xác nhận
-      default:
-        return Icons.help_outline; // Icon dấu hỏi cho các trạng thái khác
+        return Colors.grey;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey[100],
-      child: orders.isEmpty
-          ? Center(
-        child: Text('Chưa có đơn hàng nào'),
-      )
-          : ListView.builder(
-        padding: EdgeInsets.all(16.0),
-        itemCount: orders.length,
-        itemBuilder: (context, index) {
-          final order = orders[index];
-          final statusColor = _getStatusColor(order.status);
-          final statusIcon = _getStatusIcon(order.status);
-
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 10,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OrderDetailScreen(order: order),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(16.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: statusColor.withOpacity(0.1),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  statusIcon,
-                                  color: statusColor,
-                                  size: 24,
-                                ),
-                              ),
-                              SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Đơn hàng ${order.id.substring(0, 8)}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 6,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: statusColor.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                          child: Text(
-                                            order.status,
-                                            style: TextStyle(
-                                              color: statusColor,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      DateFormat('dd/MM/yyyy HH:mm')
-                                          .format(DateTime.fromMillisecondsSinceEpoch(order.createdAt)),
-                                      style: TextStyle(
-                                        color: Colors.grey[600],
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[50],
-                            border: Border(
-                              top: BorderSide(
-                                color: Colors.grey[200]!,
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Cửa hàng: ${order.store.name}',
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                NumberFormat.currency(
-                                  locale: 'vi_VN',
-                                  symbol: '₫',
-                                  decimalDigits: 0,
-                                ).format(order.totalAmount),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        title: const Text(
+          'Đơn hàng của tôi',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.orange[800],
+        elevation: 0,
+        automaticallyImplyLeading: false,
+      ),
+      body: Column(
+        children: [
+          Container(
+            color: Colors.white,
+            child: TabBar(
+              controller: _tabController,
+              labelColor: Colors.orange,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: Colors.orange,
+              tabs: [
+                Tab(text: 'Đang xử lý'),
+                Tab(text: 'Đã hoàn thành'),
+                Tab(text: 'Đã hủy'),
+              ],
             ),
-          );
-        },
+          ),
+          Expanded(
+            child: _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : TabBarView(
+              controller: _tabController,
+              children: [
+                _buildOrderListView(_activeOrders),
+                _buildOrderListView(_completedOrders),
+                _buildOrderListView(_canceledOrders),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOrderListView(List<Order> orders) {
+    if (orders.isEmpty) {
+      return Center(
+        child: Text('Không có đơn hàng nào'),
+      );
+    }
+    return RefreshIndicator(
+      onRefresh: () async => _loadOrders(),
+      child: ListView.builder(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        itemCount: orders.length,
+        itemBuilder: (context, index) => _buildOrderItem(orders[index]),
       ),
     );
   }

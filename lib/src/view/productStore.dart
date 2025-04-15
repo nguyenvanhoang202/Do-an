@@ -22,7 +22,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   bool isLoading = true;
   String? error;
 
-  // Controllers for add product dialog
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -30,7 +29,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   String _selectedCategory = "cat1";
   String _status = "available";
 
-// Danh sách danh mục
   final Map<String, String> _categories = {
     "cat1": "Các món cơm",
     "cat2": "Các món phở, bún",
@@ -270,7 +268,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
-
   Future<void> _addNewProduct() async {
     if (storeId == null) return;
 
@@ -291,7 +288,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
         'storeId': storeId,
       });
 
-      // Clear form
       _nameController.clear();
       _priceController.clear();
       _descriptionController.clear();
@@ -302,7 +298,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       });
 
       Navigator.pop(context);
-      _loadProducts(); // Reload product list
+      _loadProducts();
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -386,12 +382,20 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: product.image != null
+                      child: product.image != null && product.image!.isNotEmpty
                           ? Image.network(
                         product.image!,
                         width: 80,
                         height: 80,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: 80,
+                            height: 80,
+                            color: Colors.grey[300],
+                            child: const Icon(Icons.broken_image, size: 40, color: Colors.orange),
+                          );
+                        },
                       )
                           : Container(
                         width: 80,
