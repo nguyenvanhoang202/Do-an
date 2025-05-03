@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../model/feedback.dart' as FeedbackModel;
-import '../model/feedback_comment.dart';
-import '../model/product.dart';
-import '../model/store.dart';
-import '../service/ProductService.dart';
-import 'order/cartScreen.dart';
-import 'storeScreen.dart';
-import '../service/CartService.dart';
+import '../../model/feedback.dart' as FeedbackModel;
+import '../../model/feedback_comment.dart';
+import '../../model/product.dart';
+import '../../model/store.dart';
+import '../../service/ProductService.dart';
+import '../order/user/cartScreen.dart';
+import '../store/storeScreen.dart';
+import '../../service/CartService.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -577,7 +577,7 @@ class FeedbackSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Đánh giá sản phẩm',
+                    'Đánh giá',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

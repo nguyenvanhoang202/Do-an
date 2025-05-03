@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../model/cart.dart';
-import '../../model/cartItem.dart';
-import '../../model/order.dart';
-import '../../model/user.dart';
+import '../../../model/cart.dart';
+import '../../../model/cartItem.dart';
+import '../../../model/order.dart';
+import '../../../model/user.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
@@ -111,6 +111,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Xác nhận đơn hàng'),
       ),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../model/order.dart';
-import '../../model/user.dart' as app_user;
-import '../../model/store.dart';
+import '../../../model/order.dart';
+import '../../../model/user.dart' as app_user;
+import '../../../model/store.dart';
 import 'orderDetail.dart';
 
 class OrdersTab extends StatefulWidget {
@@ -104,9 +104,9 @@ class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
                 String status = orderData['status']?.toString()?.toLowerCase() ?? '';
                 String displayStatus = status;
 
-                // Nếu trạng thái là 'mới' hoặc rỗng, hiển thị là 'chờ xác nhận'
-                if (status.isEmpty || status == 'mới') {
-                  displayStatus = 'chờ xác nhận';
+                // Hiển thị trạng thái "mới" là "đang xử lý" cho khách hàng
+                if (status == 'mới') {
+                  displayStatus = 'đang xử lý';
                 }
 
                 final order = Order(
@@ -136,7 +136,7 @@ class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
         // Phân loại đơn hàng
         setState(() {
           _activeOrders = loadedOrders.where((o) =>
-          o.status == 'chờ xác nhận' || o.status == 'đang giao').toList();
+          o.status == 'đang xử lý' || o.status == 'đang giao').toList();
           _completedOrders = loadedOrders.where((o) =>
           o.status == 'đã giao').toList();
           _canceledOrders = loadedOrders.where((o) =>
@@ -309,7 +309,7 @@ class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
         return Colors.red;
       case 'đang giao':
         return Colors.blue;
-      case 'chờ xác nhận':
+      case 'đang xử lý':
         return Colors.orange;
       default:
         return Colors.grey;

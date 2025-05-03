@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/src/view/profile/profileScreen.dart';
-import 'order/listOrder.dart';
-import 'profile/accountTab.dart';
-import 'favorite/favoriteTab.dart';
-import 'Home/homeTab.dart';
-import 'notification/notificationsTab.dart';
+import 'package:flutter_application_2/src/view/profile/user/profileScreen.dart';
+import '../order/user/listOrder.dart';
+import '../profile/user/accountTab.dart';
+import '../favorite/favoriteTab.dart';
+import '../Home/homeTab.dart';
+import '../notification/notificationsTab.dart';
 
 class FoodHomePage extends StatefulWidget {
   @override

@@ -11,9 +11,9 @@ import '../../model/category.dart';
 import '../../model/product.dart';
 import '../../model/store.dart';
 import '../map/showlocation.dart';
-import '../order/cartScreen.dart';
-import '../productScreen.dart';
-import '../storeScreen.dart';
+import '../order/user/cartScreen.dart';
+import '../user/productScreen.dart';
+import '../store/storeScreen.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);

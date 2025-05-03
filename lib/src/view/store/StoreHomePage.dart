@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'order/incomeStore.dart';
-import 'order/listoderStore.dart';
+import '../order/store/incomeStore.dart';
+import '../order/store/listoderStore.dart';
 import 'productStore.dart';
-import 'profile/Storeprofilescreen.dart';
+import '../profile/store/Storeprofilescreen.dart';
 import 'storeInfor.dart';
 
 class StoreHomePage extends StatefulWidget {

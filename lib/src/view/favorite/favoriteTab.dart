@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../../model/store.dart';
-import '../storeScreen.dart';
+import '../store/storeScreen.dart';
 import '../../model/favorite.dart';
 
 class FavoritesTab extends StatefulWidget {

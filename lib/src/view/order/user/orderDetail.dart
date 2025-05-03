@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
-import '../../model/order.dart';
-import '../../model/store.dart';
-import '../../view/feedback/feedbackScreen.dart';
+import '../../../model/order.dart';
+import '../../../model/store.dart';
+import '../../feedback/feedbackScreen.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final Order order;
@@ -255,6 +255,18 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             SizedBox(height: 20),
 
             // Nút hành động
+            if (widget.order.status == 'mới' || widget.order.status == 'đang xử lý')
+              OutlinedButton(
+                onPressed: () => _updateOrderStatus('đã hủy'),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.red),
+                  minimumSize: Size(double.infinity, 48),
+                ),
+                child: Text(
+                  'Hủy đơn',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
             if (widget.order.status == 'đang giao')
               Row(
                 children: [
@@ -271,7 +283,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => _updateOrderStatus('đã giao'),
-                      child: Text('Xác nhận đã nhận'),
+                      child: Text('Đã nhận được hàng'),
                     ),
                   ),
                 ],

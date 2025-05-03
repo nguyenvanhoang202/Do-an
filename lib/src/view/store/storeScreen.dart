@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import '../model/category.dart';
-import '../model/product.dart';
-import '../model/store.dart';
-import 'productScreen.dart';
+import '../../model/category.dart';
+import '../../model/product.dart';
+import '../../model/store.dart';
+import '../user/productScreen.dart';
 
 class StoreScreen extends StatefulWidget {
   final Store store;
@@ -224,6 +224,7 @@ class _StoreScreenState extends State<StoreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           // Store Header

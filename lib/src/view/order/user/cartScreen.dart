@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-import '../../model/cart.dart';
-import '../../model/cartItem.dart';
-import '../../model/store.dart';
-import '../../model/user.dart' as app_user;
-import '../../service/CartService.dart';
+import '../../../model/cart.dart';
+import '../../../model/cartItem.dart';
+import '../../../model/store.dart';
+import '../../../model/user.dart' as app_user;
+import '../../../service/CartService.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'checkoutScreen.dart';
 
@@ -176,7 +176,9 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.grey[100],
         title: Text(
           'Giỏ hàng (${cartItems.length} sản phẩm)',
           style: TextStyle(fontSize: 18),

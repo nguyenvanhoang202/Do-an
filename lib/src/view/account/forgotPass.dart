@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Forgotpass extends StatefulWidget {
   @override
@@ -8,28 +9,30 @@ class Forgotpass extends StatefulWidget {
 class _ForgotpassState extends State<Forgotpass> {
   final TextEditingController _emailPhoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _otpSent = false;
+  bool _otpVerified = false;
+  bool _useEmailReset = false;
+  bool _passwordResetDone = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //  AppBar có nút back
       appBar: AppBar(
         title: const Text('Quên mật khẩu'),
-        backgroundColor: Color.fromRGBO(254, 254, 253, 1.0),
+        backgroundColor: const Color.fromRGBO(254, 254, 253, 1.0),
         foregroundColor: Colors.orange,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Quay về màn hình trước
+            Navigator.pop(context);
           },
         ),
       ),
-
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Background
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -38,23 +41,16 @@ class _ForgotpassState extends State<Forgotpass> {
               ),
             ),
           ),
-
-          // Nội dung chính
           SingleChildScrollView(
             child: Column(
               children: [
                 const SizedBox(height: 30),
-
-                // Logo
                 Image.asset(
                   'assets/img/logo4.png',
                   width: 200,
                   height: 200,
                 ),
-
                 const SizedBox(height: 10),
-
-                // Form nổi
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.all(20),
@@ -71,9 +67,11 @@ class _ForgotpassState extends State<Forgotpass> {
                   ),
                   child: Column(
                     children: [
-                      const Text(
-                        "Quên mật khẩu",
-                        style: TextStyle(
+                      Text(
+                        _otpVerified
+                            ? "Đặt lại mật khẩu"
+                            : (_otpSent ? "Nhập mã OTP" : "Quên mật khẩu"),
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.orange,
@@ -81,22 +79,53 @@ class _ForgotpassState extends State<Forgotpass> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Nhập email/số điện thoại
-                      TextField(
-                        controller: _emailPhoneController,
-                        decoration: const InputDecoration(
-                          labelText: 'Email hoặc số điện thoại',
-                          prefixIcon: Icon(Icons.email, color: Colors.orange),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange, width: 2),
+                      // Nhập email hoặc sđt
+                      if (!_otpSent && !_otpVerified)
+                        TextField(
+                          controller: _emailPhoneController,
+                          decoration: const InputDecoration(
+                            labelText: 'Email hoặc số điện thoại',
+                            prefixIcon: Icon(Icons.email, color: Colors.orange),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange, width: 2),
+                            ),
                           ),
                         ),
-                      ),
+
+                      const SizedBox(height: 10),
+
+                      if (!_otpSent && !_otpVerified)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ChoiceChip(
+                              label: const Text("OTP"),
+                              selected: !_useEmailReset,
+                              onSelected: (selected) {
+                                setState(() {
+                                  _useEmailReset = false;
+                                });
+                              },
+                              selectedColor: Colors.orange,
+                            ),
+                            const SizedBox(width: 10),
+                            ChoiceChip(
+                              label: const Text("Email"),
+                              selected: _useEmailReset,
+                              onSelected: (selected) {
+                                setState(() {
+                                  _useEmailReset = true;
+                                });
+                              },
+                              selectedColor: Colors.orange,
+                            ),
+                          ],
+                        ),
 
                       const SizedBox(height: 20),
 
-                      // Nếu đã gửi OTP thì hiển thị ô nhập OTP
-                      if (_otpSent)
+                      // Nhập mã OTP
+                      if (_otpSent && !_otpVerified)
                         TextField(
                           controller: _otpController,
                           decoration: const InputDecoration(
@@ -109,27 +138,84 @@ class _ForgotpassState extends State<Forgotpass> {
                           keyboardType: TextInputType.number,
                         ),
 
+                      // Nhập mật khẩu mới
+                      if (_otpVerified) ...[
+                        TextField(
+                          controller: _newPasswordController,
+                          decoration: const InputDecoration(
+                            labelText: 'Mật khẩu mới',
+                            prefixIcon: Icon(Icons.lock, color: Colors.orange),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange, width: 2),
+                            ),
+                          ),
+                          obscureText: true,
+                        ),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: _confirmPasswordController,
+                          decoration: const InputDecoration(
+                            labelText: 'Xác nhận mật khẩu mới',
+                            prefixIcon: Icon(Icons.lock, color: Colors.orange),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.orange, width: 2),
+                            ),
+                          ),
+                          obscureText: true,
+                        ),
+                      ],
+
                       const SizedBox(height: 30),
 
+                      // Nút hành động chính
                       ElevatedButton(
-                        onPressed: _otpSent ? _verifyOtp : _sendOtp,
+                        onPressed: _otpVerified
+                            ? _resetPassword
+                            : (_otpSent
+                            ? _verifyOtp
+                            : (_useEmailReset ? _sendEmailReset : _sendOtp)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 40,
-                            vertical: 14,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        child: Text(_otpSent ? 'Xác nhận OTP' : 'Gửi mã OTP'),
+                        child: Text(
+                          _otpVerified
+                              ? 'Cập nhật mật khẩu'
+                              : (_otpSent
+                              ? 'Xác nhận OTP'
+                              : (_useEmailReset ? 'Gửi email khôi phục' : 'Gửi mã OTP')),
+                        ),
                       ),
+
+                      // Nút quay về đăng nhập
+                      if (_passwordResetDone)
+                        Column(
+                          children: [
+                            const SizedBox(height: 20),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(Icons.login),
+                              label: const Text('Quay về đăng nhập'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey[700],
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 40),
               ],
             ),
@@ -157,8 +243,49 @@ class _ForgotpassState extends State<Forgotpass> {
     if (_otpController.text != "123456") {
       _showSnackBar("Mã OTP không đúng. Vui lòng thử lại.");
     } else {
-      _showSnackBar("Xác nhận thành công. Tiếp tục đặt lại mật khẩu.");
-      // TODO: Chuyển qua màn hình đặt lại mật khẩu
+      setState(() {
+        _otpVerified = true;
+      });
+      _showSnackBar("Xác nhận OTP thành công. Vui lòng nhập mật khẩu mới.");
+    }
+  }
+
+  void _resetPassword() {
+    if (_newPasswordController.text.isEmpty || _confirmPasswordController.text.isEmpty) {
+      _showSnackBar("Vui lòng nhập đầy đủ mật khẩu mới và xác nhận mật khẩu.");
+      return;
+    }
+
+    if (_newPasswordController.text != _confirmPasswordController.text) {
+      _showSnackBar("Mật khẩu xác nhận không khớp. Vui lòng kiểm tra lại.");
+      return;
+    }
+
+    // TODO: Gửi yêu cầu cập nhật mật khẩu qua Firebase hoặc API ở đây
+    setState(() {
+      _passwordResetDone = true;
+    });
+
+    _showSnackBar("Cập nhật mật khẩu thành công!");
+  }
+
+  void _sendEmailReset() async {
+    final email = _emailPhoneController.text.trim();
+    if (email.isEmpty) {
+      _showSnackBar("Vui lòng nhập email.");
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      _showSnackBar("Đã gửi email khôi phục mật khẩu. Vui lòng kiểm tra hộp thư.");
+
+      // ✅ THÊM DÒNG NÀY để hiển thị nút quay về đăng nhập
+      setState(() {
+        _passwordResetDone = true;
+      });
+    } catch (e) {
+      _showSnackBar("Lỗi: ${e.toString()}");
     }
   }
 
@@ -166,5 +293,14 @@ class _ForgotpassState extends State<Forgotpass> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailPhoneController.dispose();
+    _otpController.dispose();
+    _newPasswordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 }

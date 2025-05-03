@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
-import '../../model/order.dart';
-import '../../model/user.dart' as app_user;
+import '../../../model/order.dart';
+import '../../../model/user.dart' as app_user;
 
 class StoreOrderDetailScreen extends StatefulWidget {
   final Order order;
@@ -293,7 +293,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                                 padding: EdgeInsets.symmetric(vertical: 12),
                               ),
                               child: Text(
-                                'Hủy đơn',
+                                'Từ chối đơn',
                                 style: TextStyle(color: Colors.red),
                               ),
                             ),
@@ -301,7 +301,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                           SizedBox(width: 16),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () => _updateOrderStatus('đang xử lý'),
+                              onPressed: () => _updateOrderStatus('đang giao'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
                                 padding: EdgeInsets.symmetric(vertical: 12),
@@ -312,42 +312,34 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                         ],
                       ),
 
-                    // Nút cho đơn đang xử lý
-                    if (widget.order.status == 'đang xử lý')
-                      Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () => _updateOrderStatus('đang giao'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              minimumSize: Size(double.infinity, 48),
-                            ),
-                            child: Text('Đã giao cho tài xế'),
-                          ),
-                          SizedBox(height: 10),
-                          OutlinedButton(
-                            onPressed: () => _updateOrderStatus('đã hủy'),
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: Colors.red),
-                              minimumSize: Size(double.infinity, 48),
-                            ),
-                            child: Text(
-                              'Hủy đơn',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
-                      ),
+
 
                     // Nút cho đơn đang giao
                     if (widget.order.status == 'đang giao')
-                      ElevatedButton(
-                        onPressed: () => _updateOrderStatus('đã giao'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          minimumSize: Size(double.infinity, 48),
-                        ),
-                        child: Text('Xác nhận đã giao'),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: null, // Vô hiệu hóa
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey,
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              child: Text('Gọi cho khách'),
+                            ),
+                          ),
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: null, // Vô hiệu hóa
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey,
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              child: Text('Gọi cho shipper'),
+                            ),
+                          ),
+                        ],
                       ),
                   ],
                 ),

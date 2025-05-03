@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'model/category.dart';
 import 'model/product.dart';
-import 'view/productScreen.dart';
+import 'view/user/productScreen.dart';
 
 
 class CategoryProductScreen extends StatefulWidget {

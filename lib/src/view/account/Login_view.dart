@@ -2,8 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../firebase/firebase_auth.dart';
-import '../home_view.dart';
-import '../StoreHomePage.dart';
+import '../user/home_view.dart';
+import '../store/StoreHomePage.dart';
 import 'Register_view.dart';
 import 'forgotPass.dart';
 

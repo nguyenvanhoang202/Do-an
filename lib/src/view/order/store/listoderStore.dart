@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../model/order.dart';
-import '../../model/user.dart' as app_user;
-import '../../model/store.dart';
+import '../../../model/order.dart';
+import '../../../model/user.dart' as app_user;
+import '../../../model/store.dart';
 import 'oderDetailStore.dart';
 
 class StoreOrdersScreen extends StatefulWidget {
@@ -146,9 +146,8 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
       _allOrders = orders;
       _newOrders = orders.where((o) => o.status.toLowerCase() == 'mới').toList();
       _receivedOrders = orders.where((o) =>
-      o.status.toLowerCase() == 'đang giao' ||
-          o.status.toLowerCase() == 'đang xử lý'
-      ).toList();
+      o.status.toLowerCase() == 'đang xử lý' ||
+          o.status.toLowerCase() == 'đang giao').toList();
       _completedOrders = orders.where((o) => o.status.toLowerCase() == 'đã giao').toList();
       _canceledOrders = orders.where((o) => o.status.toLowerCase() == 'đã hủy').toList();
     });
