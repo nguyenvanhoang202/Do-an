@@ -7,6 +7,7 @@ class Store {
   String status;
   double rating;
   String? image; // Add optional image property
+  dynamic local;
 
   Store({
     required this.id,
@@ -17,6 +18,7 @@ class Store {
     required this.status,
     required this.rating,
     this.image, // Add image to constructor
+    this.local,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,6 +31,7 @@ class Store {
       'status': status,
       'rating': rating,
       'image': image, // Add image to map
+      'local': local,
     };
   }
 
@@ -44,6 +47,7 @@ class Store {
           ? (map['rating'] as int).toDouble()
           : map['rating'] as double,
       image: map['image'] as String?, // Parse image from map
+      local: map['local'],
     );
   }
 }

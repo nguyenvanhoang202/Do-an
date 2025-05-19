@@ -5,6 +5,7 @@ import '../../model/category.dart';
 import '../../model/product.dart';
 import '../../model/store.dart';
 import '../user/productScreen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StoreScreen extends StatefulWidget {
   final Store store;
@@ -220,6 +221,34 @@ class _StoreScreenState extends State<StoreScreen> {
       });
     }
   }
+  void _openMap() async {
+    final local = widget.store.local;
+    if (local != null && local['lat'] != null && local['lng'] != null) {
+      final double lat = local['lat'];
+      final double lng = local['lng'];
+
+      final Uri googleMapsUrl = Uri.parse(
+          'https://www.google.com/maps/search/?api=1&query=$lat,$lng');
+
+      if (await canLaunchUrl(googleMapsUrl)) {
+        await launchUrl(googleMapsUrl);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Không thể mở Google Maps'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cửa hàng chưa có thông tin vị trí'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -336,6 +365,11 @@ class _StoreScreenState extends State<StoreScreen> {
                           widget.store.address,
                           style: TextStyle(color: Colors.grey[600]),
                         ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.map, color: Colors.orange[800]),
+                        onPressed: _openMap,
+                        tooltip: 'Xem bản đồ',
                       ),
                     ],
                   ),

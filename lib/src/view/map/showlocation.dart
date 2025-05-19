@@ -27,15 +27,20 @@ class _LocationPickerState extends State<LocationPicker> {
     _getCurrentLocation();
   }
 
+  bool _hasMoved = false;
+
   Future<void> _getCurrentLocation() async {
     final permission = await Permission.location.request();
 
     if (permission.isGranted) {
       try {
         Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
+          desiredAccuracy: LocationAccuracy.high,
+        );
 
         final location = LatLng(position.latitude, position.longitude);
+
+        if (!mounted) return;
 
         setState(() {
           _selectedLocation = location;
@@ -52,7 +57,11 @@ class _LocationPickerState extends State<LocationPicker> {
           );
         });
 
-        _mapController.move(location, 15);
+        if (!_hasMoved) {
+          _mapController.move(location, 15);
+          _hasMoved = true; // Chỉ cho phép move 1 lần đầu
+        }
+
       } catch (e) {
         debugPrint('Error getting location: $e');
       }
@@ -89,33 +98,21 @@ class _LocationPickerState extends State<LocationPicker> {
       ),
       child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
+          PreferredSize(
+            preferredSize: const Size.fromHeight(56),
+            child: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.orange[800],
+              elevation: 0,
+              centerTitle: false,
+              title: const Text(
+                'Chọn vị trí của bạn',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: const Offset(0, 1),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                const Text(
-                  'Chọn vị trí của bạn',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
+              actions: [
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () => Navigator.pop(context),
@@ -127,8 +124,7 @@ class _LocationPickerState extends State<LocationPicker> {
             child: FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                initialCenter: const LatLng(21.0285, 105.8542),
-                // Tọa độ TP.HCM
+                initialCenter: _selectedLocation ?? const LatLng(0, 0),
                 initialZoom: 14,
                 onTap: _handleTapMap,
               ),
