@@ -280,7 +280,7 @@ class _ForgotpassState extends State<Forgotpass> {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       _showSnackBar("Đã gửi email khôi phục mật khẩu. Vui lòng kiểm tra hộp thư.");
 
-      // ✅ THÊM DÒNG NÀY để hiển thị nút quay về đăng nhập
+      //  nút quay về đăng nhập
       setState(() {
         _passwordResetDone = true;
       });
