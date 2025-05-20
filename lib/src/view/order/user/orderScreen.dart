@@ -97,7 +97,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đặt hàng thành công!')),
+        const SnackBar(content: Text('Đặt hàng thành công!')),
       );
 
       // Quay về màn hình chính
@@ -115,12 +115,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Xác nhận đơn hàng'),
+        title: const Text('Xác nhận đơn hàng'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -129,22 +129,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     // Chi tiết đơn hàng
                     Card(
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Chi tiết đơn hàng',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Divider(),
+                            const Divider(),
                             ...widget.cartItems
                                 .map((item) => Padding(
                                       padding:
-                                          EdgeInsets.symmetric(vertical: 8),
+                                          const EdgeInsets.symmetric(vertical: 8),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -152,22 +152,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           Expanded(
                                             child: Text(
                                               '${item.product.name} x${item.quantity}',
-                                              style: TextStyle(fontSize: 16),
+                                              style: const TextStyle(fontSize: 16),
                                             ),
                                           ),
                                           Text(
                                             '${(item.price * item.quantity).toStringAsFixed(0)}đ',
-                                            style: TextStyle(fontSize: 16),
+                                            style: const TextStyle(fontSize: 16),
                                           ),
                                         ],
                                       ),
                                     ))
                                 .toList(),
-                            Divider(),
+                            const Divider(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                const Text(
                                   'Tổng tiền:',
                                   style: TextStyle(
                                     fontSize: 18,
@@ -176,7 +176,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                                 Text(
                                   '${widget.totalAmount.toStringAsFixed(0)}đ',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.red,
@@ -189,26 +189,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // Thông tin người nhận
                     Card(
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Thông tin người nhận',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             TextFormField(
                               controller: _nameController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Tên người nhận',
                                 border: OutlineInputBorder(),
                               ),
@@ -219,10 +219,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             TextFormField(
                               controller: _phoneController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Số điện thoại',
                                 border: OutlineInputBorder(),
                               ),
@@ -233,10 +233,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             TextFormField(
                               controller: _addressController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Địa chỉ',
                                 border: OutlineInputBorder(),
                               ),
@@ -247,9 +247,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Ghi chú (tùy chọn)',
                                 border: OutlineInputBorder(),
                               ),
@@ -260,10 +260,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // Phương thức thanh toán
-                    Card(
+                    const Card(
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Column(
@@ -292,7 +292,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // Nút đặt hàng
                     SizedBox(
@@ -300,7 +300,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: _createOrder,
-                        child: Text(
+                        child: const Text(
                           'Xác nhận đặt hàng',
                           style: TextStyle(fontSize: 18),
                         ),

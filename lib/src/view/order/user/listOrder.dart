@@ -203,7 +203,7 @@ class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
         final productName = snapshot.hasData ? snapshot.data![1] as String? : 'Đang tải...';
 
         return Card(
-          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: InkWell(
             onTap: () {
               Navigator.push(
@@ -214,7 +214,7 @@ class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
               );
             },
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
                   // Ảnh sản phẩm
@@ -232,38 +232,38 @@ class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
                           : null,
                     ),
                     child: productImage == null
-                        ? Icon(Icons.fastfood, color: Colors.grey)
+                        ? const Icon(Icons.fastfood, color: Colors.grey)
                         : null,
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           productName ?? 'Không có tên sản phẩm',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           'Mã đơn: ${order.id.substring(0, 8)}',
                           style: TextStyle(color: Colors.grey[600]),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           DateFormat('dd/MM/yyyy HH:mm').format(
                               DateTime.fromMillisecondsSinceEpoch(order.createdAt)),
                           style: TextStyle(color: Colors.grey[600]),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: _getStatusColor(order.status).withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(12),
@@ -282,7 +282,7 @@ class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
                                 locale: 'vi_VN',
                                 symbol: '₫',
                               ).format(order.totalAmount),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.red,
                               ),
@@ -342,15 +342,15 @@ class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
               unselectedLabelColor: Colors.grey,
               indicatorColor: Colors.orange,
               tabs: [
-                Tab(text: 'Đang xử lý'),
-                Tab(text: 'Đã hoàn thành'),
-                Tab(text: 'Đã hủy'),
+                const Tab(text: 'Đang xử lý'),
+                const Tab(text: 'Đã hoàn thành'),
+                const Tab(text: 'Đã hủy'),
               ],
             ),
           ),
           Expanded(
             child: _isLoading
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : TabBarView(
               controller: _tabController,
               children: [
@@ -367,14 +367,14 @@ class _OrdersTabState extends State<OrdersTab> with TickerProviderStateMixin {
 
   Widget _buildOrderListView(List<Order> orders) {
     if (orders.isEmpty) {
-      return Center(
+      return const Center(
         child: Text('Không có đơn hàng nào'),
       );
     }
     return RefreshIndicator(
       onRefresh: () async => _loadOrders(),
       child: ListView.builder(
-        padding: EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: orders.length,
         itemBuilder: (context, index) => _buildOrderItem(orders[index]),
       ),

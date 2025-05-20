@@ -91,7 +91,7 @@ class _HomeTabState extends State<HomeTab> {
         controller: _searchController,
         onChanged: _searchProducts,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search),
           suffixIcon: _searchController.text.isNotEmpty
               ? IconButton(
                   icon: const Icon(Icons.clear),

@@ -160,7 +160,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Xóa sản phẩm thành công!'),
+          content: const Text('Xóa sản phẩm thành công!'),
           backgroundColor: Colors.green[600],
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -186,7 +186,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       backgroundColor: Colors.white,
@@ -222,7 +222,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     TextField(
                       controller: _nameController,
                       decoration: InputDecoration(
@@ -238,7 +238,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: _priceController,
                       decoration: InputDecoration(
@@ -254,7 +254,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: _descriptionController,
                       decoration: InputDecoration(
@@ -271,7 +271,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: _imageController,
                       decoration: InputDecoration(
@@ -287,7 +287,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
                       value: _selectedCategory,
                       decoration: InputDecoration(
@@ -312,7 +312,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         });
                       },
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
                       value: _status,
                       decoration: InputDecoration(
@@ -341,21 +341,21 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         });
                       },
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange[700],
                           foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           elevation: 2,
                         ),
                         onPressed: _addNewProduct,
-                        child: Text(
+                        child: const Text(
                           "Lưu sản phẩm",
                           style: TextStyle(
                             fontSize: 16,
@@ -364,7 +364,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -409,7 +409,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Thêm sản phẩm thành công!'),
+          content: const Text('Thêm sản phẩm thành công!'),
           backgroundColor: Colors.green[600],
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -491,7 +491,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
               size: 60,
               color: Colors.red[600],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               error!,
               style: TextStyle(
@@ -501,18 +501,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange[700],
                 foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               onPressed: _loadStoreId,
-              child: Text(
+              child: const Text(
                 'Thử lại',
                 style: TextStyle(
                   fontSize: 16,

@@ -55,7 +55,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
       if (sizeInMB > 1) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn')),
+          const SnackBar(content: Text('Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn')),
         );
         return;
       }
@@ -149,7 +149,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đánh giá thành công!')),
+        const SnackBar(content: Text('Đánh giá thành công!')),
       );
       Navigator.of(context).pop();
     } catch (e) {
@@ -165,30 +165,30 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Đánh giá sản phẩm'),
+        title: const Text('Đánh giá sản phẩm'),
       ),
       body: _isSubmitting
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
                   ...widget.orderItems
                       .map((item) => Card(
-                            margin: EdgeInsets.only(bottom: 16),
+                            margin: const EdgeInsets.only(bottom: 16),
                             child: Padding(
-                              padding: EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     item['name'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 16),
+                                  const SizedBox(height: 16),
                                   Row(
                                     children: List.generate(5, (index) {
                                       return IconButton(
@@ -209,28 +209,28 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                       );
                                     }),
                                   ),
-                                  SizedBox(height: 16),
+                                  const SizedBox(height: 16),
                                   TextField(
                                     controller:
                                         _contentControllers[item['name']],
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       hintText: 'Nhập đánh giá của bạn',
                                       border: OutlineInputBorder(),
                                     ),
                                     maxLines: 3,
                                   ),
-                                  SizedBox(height: 16),
+                                  const SizedBox(height: 16),
                                   Row(
                                     children: [
                                       ElevatedButton.icon(
                                         onPressed: () =>
                                             _pickImage(item['name']),
-                                        icon: Icon(Icons.camera_alt),
-                                        label: Text('Thêm ảnh'),
+                                        icon: const Icon(Icons.camera_alt),
+                                        label: const Text('Thêm ảnh'),
                                       ),
                                       if (_selectedImages[item['name']] !=
                                           null) ...[
-                                        SizedBox(width: 8),
+                                        const SizedBox(width: 8),
                                         ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(8),
@@ -242,7 +242,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                           ),
                                         ),
                                         IconButton(
-                                          icon: Icon(Icons.close,
+                                          icon: const Icon(Icons.close,
                                               color: Colors.red),
                                           onPressed: () {
                                             setState(() {
@@ -261,13 +261,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             ),
                           ))
                       .toList(),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: _submitFeedback,
-                      child: Text(
+                      child: const Text(
                         'Gửi đánh giá',
                         style: TextStyle(fontSize: 18),
                       ),

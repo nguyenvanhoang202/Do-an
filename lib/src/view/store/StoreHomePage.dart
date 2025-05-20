@@ -42,7 +42,7 @@ class _StoreHomePageState extends State<StoreHomePage> with SingleTickerProvider
         color: Colors.orange,
         child: TabBar(
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Tab(icon: Icon(Icons.store_outlined), text: "Cửa hàng"),
             Tab(icon: Icon(Icons.fastfood_outlined), text: "Danh mục"),
             Tab(icon: Icon(Icons.receipt_long_outlined), text: "Đơn hàng"),

@@ -228,10 +228,10 @@ class _RegisterShopScreenState extends State<RegisterShopScreen> {
                 ),
                 onPressed: _agreeTerms && !_isLoading ? () => _confirmRegisterShop(context) : null,
                 child: _isLoading
-                    ? CircularProgressIndicator(
+                    ? const CircularProgressIndicator(
                   color: Colors.white,
                 )
-                    : Text(
+                    : const Text(
                   'Đăng ký ngay',
                   style: TextStyle(
                     fontSize: 16,
@@ -391,7 +391,7 @@ class _RegisterShopScreenState extends State<RegisterShopScreen> {
                   ),
                   elevation: 2,
                 ),
-                child: Text(
+                child: const Text(
                   'Đồng ý',
                   style: TextStyle(
                     fontSize: 16,
@@ -523,7 +523,7 @@ class _RegisterShopScreenState extends State<RegisterShopScreen> {
                   ),
                   elevation: 2,
                 ),
-                child: Text(
+                child: const Text(
                   'OK',
                   style: TextStyle(
                     fontSize: 16,

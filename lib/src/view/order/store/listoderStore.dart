@@ -167,7 +167,7 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
     try {
       await _database.child('orders/$orderId/status').set(newStatus);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đã cập nhật trạng thái đơn hàng')),
+        const SnackBar(content: Text('Đã cập nhật trạng thái đơn hàng')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -178,13 +178,13 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
 
   Widget _buildOrderList(List<Order> orders, {bool showActions = false}) {
     if (orders.isEmpty) {
-      return Center(
+      return const Center(
         child: Text('Không có đơn hàng nào'),
       );
     }
 
     return ListView.builder(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       itemCount: orders.length,
       itemBuilder: (context, index) {
         final order = orders[index];
@@ -192,7 +192,7 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
         final statusIcon = _getStatusIcon(order.status);
 
         return Card(
-          margin: EdgeInsets.only(bottom: 16),
+          margin: const EdgeInsets.only(bottom: 16),
           child: InkWell(
             onTap: () {
               Navigator.push(
@@ -203,13 +203,13 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
               );
             },
             child: Padding(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: Container(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: statusColor.withOpacity(0.1),
                         shape: BoxShape.circle,
@@ -224,19 +224,19 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
                     trailing: Chip(
                       label: Text(
                         order.status,
-                        style: TextStyle(color: Colors.white, fontSize: 12),
+                        style: const TextStyle(color: Colors.white, fontSize: 12),
                       ),
                       backgroundColor: statusColor,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Tổng tiền: ${NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(order.totalAmount)}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -289,15 +289,15 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text('Quản lý đơn hàng', style: TextStyle(color: Colors.black87)),
+        title: const Text('Quản lý đơn hàng', style: TextStyle(color: Colors.black87)),
         backgroundColor: Colors.grey[100],
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black87),
+        iconTheme: const IconThemeData(color: Colors.black87),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(48),
+          preferredSize: const Size.fromHeight(48),
           child: Container(
             color: Colors.grey[100],
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TabBar(
               controller: _tabController,
               isScrollable: false,
@@ -306,10 +306,10 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
               unselectedLabelColor: Colors.grey[600],
               indicatorWeight: 3,
               tabs: [
-                Tab(icon: Icon(Icons.access_time, size: 20), text: 'Mới'),
-                Tab(icon: Icon(Icons.inventory, size: 20), text: 'Đã nhận'),
-                Tab(icon: Icon(Icons.check_circle, size: 20), text: 'Hoàn thành'),
-                Tab(icon: Icon(Icons.cancel, size: 20), text: 'Đã hủy'),
+                const Tab(icon: Icon(Icons.access_time, size: 20), text: 'Mới'),
+                const Tab(icon: Icon(Icons.inventory, size: 20), text: 'Đã nhận'),
+                const Tab(icon: Icon(Icons.check_circle, size: 20), text: 'Hoàn thành'),
+                const Tab(icon: Icon(Icons.cancel, size: 20), text: 'Đã hủy'),
               ],
             ),
           ),

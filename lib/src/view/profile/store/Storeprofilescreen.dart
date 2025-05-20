@@ -72,7 +72,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       backgroundColor: Colors.white,
@@ -108,7 +108,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     TextField(
                       controller: nameController,
                       decoration: InputDecoration(
@@ -124,7 +124,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: phoneController,
                       decoration: InputDecoration(
@@ -140,7 +140,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                       keyboardType: TextInputType.phone,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
                       value: selectedGender,
                       decoration: InputDecoration(
@@ -162,7 +162,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                         setModalState(() => selectedGender = value);
                       },
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     InkWell(
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -199,7 +199,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: addressController,
                       decoration: InputDecoration(
@@ -216,14 +216,14 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange[700],
                           foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -255,7 +255,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Cập nhật thông tin thành công'),
+                                  content: const Text('Cập nhật thông tin thành công'),
                                   backgroundColor: Colors.green[600],
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(
@@ -271,10 +271,10 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                           }
                         },
                         child: isLoading
-                            ? CircularProgressIndicator(
+                            ? const CircularProgressIndicator(
                           color: Colors.white,
                         )
-                            : Text(
+                            : const Text(
                           "Lưu",
                           style: TextStyle(
                             fontSize: 16,
@@ -283,7 +283,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -303,7 +303,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       backgroundColor: Colors.white,
@@ -339,7 +339,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     TextField(
                       controller: currentPassController,
                       decoration: InputDecoration(
@@ -355,7 +355,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                       obscureText: true,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: newPassController,
                       decoration: InputDecoration(
@@ -371,7 +371,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                       obscureText: true,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: confirmPassController,
                       decoration: InputDecoration(
@@ -387,14 +387,14 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                       obscureText: true,
                       textInputAction: TextInputAction.done,
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange[700],
                           foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -424,7 +424,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Đổi mật khẩu thành công'),
+                                  content: const Text('Đổi mật khẩu thành công'),
                                   backgroundColor: Colors.green[600],
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(
@@ -440,10 +440,10 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                           }
                         },
                         child: isLoading
-                            ? CircularProgressIndicator(
+                            ? const CircularProgressIndicator(
                           color: Colors.white,
                         )
-                            : Text(
+                            : const Text(
                           "Xác nhận",
                           style: TextStyle(
                             fontSize: 16,
@@ -452,7 +452,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -696,7 +696,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
             ),
           ),
         ),
-        if (showDivider) Divider(height: 1, indent: 16, endIndent: 16),
+        if (showDivider) const Divider(height: 1, indent: 16, endIndent: 16),
       ],
     );
   }

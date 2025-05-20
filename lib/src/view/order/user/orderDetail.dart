@@ -69,7 +69,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       await _database.child('orders/${widget.order.id}/status').set(newStatus);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đã cập nhật trạng thái đơn hàng')),
+        const SnackBar(content: Text('Đã cập nhật trạng thái đơn hàng')),
       );
 
       setState(() {
@@ -98,30 +98,30 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chi tiết đơn hàng'),
+        title: const Text('Chi tiết đơn hàng'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Thông tin cửa hàng
             Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.order.store.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     _buildInfoRow('Địa chỉ:', widget.order.store.address),
                     _buildInfoRow('SĐT:', widget.order.store.phoneNumber),
                   ],
@@ -129,23 +129,23 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               ),
             ),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Thông tin đơn hàng
             Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Thông tin đơn hàng',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildInfoRow('Mã đơn:', widget.order.id.substring(0, 8)),
                     _buildInfoRow(
                       'Ngày đặt:',
@@ -159,23 +159,23 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               ),
             ),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Thông tin giao hàng
             Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Thông tin giao hàng',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildInfoRow('Người nhận:', widget.order.recipientName),
                     _buildInfoRow('Địa chỉ:', widget.order.recipientAddress),
                     if (widget.order.note != null && widget.order.note!.isNotEmpty)
@@ -185,25 +185,25 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               ),
             ),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Chi tiết sản phẩm
             Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Sản phẩm đã đặt',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     ...orderItems.map((item) => Padding(
-                      padding: EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.only(bottom: 12),
                       child: Row(
                         children: [
                           Container(
@@ -220,17 +220,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               color: Colors.grey[200],
                             ),
                             child: item['image'] == null
-                                ? Icon(Icons.fastfood, color: Colors.grey)
+                                ? const Icon(Icons.fastfood, color: Colors.grey)
                                 : null,
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   item['name'],
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text('Số lượng: ${item['quantity']}'),
                               ],
@@ -245,24 +245,24 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         ],
                       ),
                     )),
-                    Divider(),
+                    const Divider(),
                     _buildTotalRow('Tổng tiền:', widget.order.totalAmount),
                   ],
                 ),
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Nút hành động
             if (widget.order.status == 'mới' || widget.order.status == 'đang xử lý')
               OutlinedButton(
                 onPressed: () => _updateOrderStatus('đã hủy'),
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Colors.red),
-                  minimumSize: Size(double.infinity, 48),
+                  side: const BorderSide(color: Colors.red),
+                  minimumSize: const Size(double.infinity, 48),
                 ),
-                child: Text(
+                child: const Text(
                   'Hủy đơn',
                   style: TextStyle(color: Colors.red),
                 ),
@@ -274,16 +274,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     child: OutlinedButton(
                       onPressed: () => _updateOrderStatus('đã hủy'),
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.red),
+                        side: const BorderSide(color: Colors.red),
                       ),
-                      child: Text('Hủy đơn', style: TextStyle(color: Colors.red)),
+                      child: const Text('Hủy đơn', style: TextStyle(color: Colors.red)),
                     ),
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => _updateOrderStatus('đã giao'),
-                      child: Text('Đã nhận được hàng'),
+                      child: const Text('Đã nhận được hàng'),
                     ),
                   ),
                 ],
@@ -296,7 +296,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -312,7 +312,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -324,13 +324,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
   Widget _buildTotalRow(String label, double amount) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -340,7 +340,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               locale: 'vi_VN',
               symbol: '₫',
             ).format(amount),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.red,

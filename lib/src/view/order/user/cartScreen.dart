@@ -47,7 +47,7 @@ class _CartScreenState extends State<CartScreen> {
                 return cartData['status'] == 'pending' &&
                     cartData['isPaid'] == 0;
               },
-              orElse: () => MapEntry('', {}),
+              orElse: () => const MapEntry('', {}),
             );
 
             if (pendingCart.key.isEmpty) {
@@ -181,12 +181,12 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: Colors.grey[100],
         title: Text(
           'Giỏ hàng (${cartItems.length} sản phẩm)',
-          style: TextStyle(fontSize: 18),
+          style: const TextStyle(fontSize: 18),
         ),
         actions: [
           if (cartItems.isNotEmpty)
             IconButton(
-              icon: Icon(Icons.delete_forever, color: Colors.red),
+              icon: const Icon(Icons.delete_forever, color: Colors.red),
               onPressed: _removeAllItems,
               tooltip: 'Xóa tất cả',
             ),
@@ -200,9 +200,9 @@ class _CartScreenState extends State<CartScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.shopping_cart_outlined,
+                        const Icon(Icons.shopping_cart_outlined,
                             size: 100, color: Colors.grey),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Text(
                           'Giỏ hàng trống',
                           style: TextStyle(
@@ -214,7 +214,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   )
                 : ListView.builder(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     itemCount: cartItems.length,
                     itemBuilder: (context, index) {
                       final item = cartItems[index];
@@ -228,19 +228,19 @@ class _CartScreenState extends State<CartScreen> {
           ),
           if (cartItems.isNotEmpty)
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Tổng tiền:',
                         style: TextStyle(fontSize: 16),
                       ),
                       Text(
                         '${_calculateTotal().toStringAsFixed(0)}đ',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.red,
@@ -248,7 +248,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -262,9 +262,9 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       );
                     },
-                    child: Text('Đặt hàng'),
+                    child: const Text('Đặt hàng'),
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 48),
+                      minimumSize: const Size(double.infinity, 48),
                     ),
                   ),
                 ],
@@ -293,7 +293,7 @@ class CartItemWidget extends StatelessWidget {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -310,12 +310,12 @@ class CartItemWidget extends StatelessWidget {
                     width: 70,
                     height: 70,
                     color: Colors.grey[300],
-                    child: Icon(Icons.image_not_supported),
+                    child: const Icon(Icons.image_not_supported),
                   );
                 },
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
 
             // Thông tin sản phẩm
             Expanded(
@@ -324,17 +324,17 @@ class CartItemWidget extends StatelessWidget {
                 children: [
                   Text(
                     item.product.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     '${item.price.toStringAsFixed(0)}đ',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
@@ -358,10 +358,10 @@ class CartItemWidget extends StatelessWidget {
                     width: 28,
                     height: 28,
                     child: IconButton(
-                      icon: Icon(Icons.remove, size: 16),
+                      icon: const Icon(Icons.remove, size: 16),
                       onPressed: onDecrease,
                       padding: EdgeInsets.zero,
-                      constraints: BoxConstraints(),
+                      constraints: const BoxConstraints(),
                     ),
                   ),
                   Container(
@@ -369,17 +369,17 @@ class CartItemWidget extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       '${item.quantity}',
-                      style: TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
                   SizedBox(
                     width: 28,
                     height: 28,
                     child: IconButton(
-                      icon: Icon(Icons.add, size: 16),
+                      icon: const Icon(Icons.add, size: 16),
                       onPressed: onIncrease,
                       padding: EdgeInsets.zero,
-                      constraints: BoxConstraints(),
+                      constraints: const BoxConstraints(),
                     ),
                   ),
                 ],

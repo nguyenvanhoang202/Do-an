@@ -44,7 +44,7 @@ class _FoodHomePageState extends State<FoodHomePage> with SingleTickerProviderSt
         color: Colors.orange, // Màu nền của TabBar
         child: TabBar(
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Tab(icon: Icon(Icons.restaurant_outlined), text: "Trang chủ"),
             Tab(icon: Icon(Icons.list_alt_outlined), text: "Đơn hàng"),
             Tab(icon: Icon(Icons.favorite_outline), text: "Yêu thích"),

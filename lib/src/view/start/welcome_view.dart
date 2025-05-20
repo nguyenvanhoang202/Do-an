@@ -10,7 +10,7 @@ class WelcomeScreen extends StatelessWidget {
         children: [
           // Background image
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/img/welcome.jpg'),
                 // Thêm đường dẫn tới hình ảnh tương tự
@@ -23,8 +23,8 @@ class WelcomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Text at the top center
-              Padding(
-                padding: const EdgeInsets.only(top: 100),
+              const Padding(
+                padding: EdgeInsets.only(top: 100),
                 // Khoảng cách từ trên xuống
                 child: Center(
                   child: Text(
@@ -41,12 +41,12 @@ class WelcomeScreen extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 500),
+                  const SizedBox(height: 500),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange, // Màu nút
                       padding:
-                          EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -58,7 +58,7 @@ class WelcomeScreen extends StatelessWidget {
                       );
                       // Xử lý sự kiện khi bấm
                     },
-                    child: Text(
+                    child: const Text(
                       'Login',
                       style: TextStyle(
                         fontSize: 18,
@@ -66,12 +66,12 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange, // Màu nút
                       padding:
-                          EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -83,7 +83,7 @@ class WelcomeScreen extends StatelessWidget {
                       );
                       // Xử lý sự kiện khi bấm
                     },
-                    child: Text(
+                    child: const Text(
                       'Register',
                       style: TextStyle(
                         fontSize: 18,

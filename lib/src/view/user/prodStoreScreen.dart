@@ -44,7 +44,7 @@ class _ProductDetailPageAdminState extends State<ProductDetailPageAdmin> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       backgroundColor: Colors.white,
@@ -80,7 +80,7 @@ class _ProductDetailPageAdminState extends State<ProductDetailPageAdmin> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     TextField(
                       controller: nameController,
                       decoration: InputDecoration(
@@ -96,7 +96,7 @@ class _ProductDetailPageAdminState extends State<ProductDetailPageAdmin> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: priceController,
                       decoration: InputDecoration(
@@ -112,7 +112,7 @@ class _ProductDetailPageAdminState extends State<ProductDetailPageAdmin> {
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: descriptionController,
                       decoration: InputDecoration(
@@ -129,7 +129,7 @@ class _ProductDetailPageAdminState extends State<ProductDetailPageAdmin> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: imageController,
                       decoration: InputDecoration(
@@ -145,14 +145,14 @@ class _ProductDetailPageAdminState extends State<ProductDetailPageAdmin> {
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange[700],
                           foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -170,7 +170,7 @@ class _ProductDetailPageAdminState extends State<ProductDetailPageAdmin> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Cập nhật sản phẩm thành công!'),
+                                content: const Text('Cập nhật sản phẩm thành công!'),
                                 backgroundColor: Colors.green[600],
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
@@ -191,7 +191,7 @@ class _ProductDetailPageAdminState extends State<ProductDetailPageAdmin> {
                             );
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           "Lưu thay đổi",
                           style: TextStyle(
                             fontSize: 16,
@@ -200,7 +200,7 @@ class _ProductDetailPageAdminState extends State<ProductDetailPageAdmin> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -323,9 +323,9 @@ class ProductInfoSectionAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
         ),
@@ -352,7 +352,7 @@ class ProductInfoSectionAdmin extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.star, color: Colors.amber, size: 20),
+                        const Icon(Icons.star, color: Colors.amber, size: 20),
                         const SizedBox(width: 4),
                         Text(
                           product.rating.toStringAsFixed(1),

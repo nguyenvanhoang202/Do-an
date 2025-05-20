@@ -83,7 +83,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
           .update({'status': newStatus});
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đã cập nhật trạng thái thành công!')),
+        const SnackBar(content: Text('Đã cập nhật trạng thái thành công!')),
       );
 
       Navigator.pop(context, true);
@@ -101,9 +101,9 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
         title: Text('Chi tiết đơn hàng #${widget.order.id.substring(0, 8)}'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -111,20 +111,20 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
             Card(
               elevation: 2,
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Thông tin khách hàng',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     ListTile(
-                      leading: Icon(Icons.person, color: Colors.blue),
+                      leading: const Icon(Icons.person, color: Colors.blue),
                       title: Text(_customer?.name ?? 'Khách hàng'),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,24 +141,24 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
               ),
             ),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Thông tin giao hàng
             Card(
               elevation: 2,
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Thông tin giao hàng',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildInfoRow('Người nhận:', widget.order.recipientName),
                     _buildInfoRow('Địa chỉ:', widget.order.recipientAddress),
                     _buildInfoRow(
@@ -174,26 +174,26 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
               ),
             ),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Chi tiết đơn hàng
             Card(
               elevation: 2,
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Chi tiết đơn hàng',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     ...orderItems.map((item) => Padding(
-                      padding: EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.only(bottom: 12),
                       child: Row(
                         children: [
                           Container(
@@ -210,17 +210,17 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                               color: Colors.grey[200],
                             ),
                             child: item['image'] == null
-                                ? Icon(Icons.fastfood, color: Colors.grey)
+                                ? const Icon(Icons.fastfood, color: Colors.grey)
                                 : null,
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   item['name'],
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text('Số lượng: ${item['quantity']}'),
                               ],
@@ -232,7 +232,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                               symbol: '₫',
                               decimalDigits: 0,
                             ).format(item['price'] * item['quantity']),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -244,31 +244,31 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Trạng thái và nút xác nhận
             Card(
               elevation: 2,
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Trạng thái đơn hàng',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Row(
                       children: [
                         Icon(
                           _getStatusIcon(widget.order.status),
                           color: _getStatusColor(widget.order.status),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Text(
                           widget.order.status,
                           style: TextStyle(
@@ -279,7 +279,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // Nút cho đơn mới
                     if (widget.order.status == 'mới')
@@ -289,24 +289,24 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                             child: OutlinedButton(
                               onPressed: () => _updateOrderStatus('đã hủy'),
                               style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: Colors.red),
-                                padding: EdgeInsets.symmetric(vertical: 12),
+                                side: const BorderSide(color: Colors.red),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
                               ),
-                              child: Text(
+                              child: const Text(
                                 'Từ chối đơn',
                                 style: TextStyle(color: Colors.red),
                               ),
                             ),
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () => _updateOrderStatus('đang giao'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
-                                padding: EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
                               ),
-                              child: Text('Xác nhận đơn'),
+                              child: const Text('Xác nhận đơn'),
                             ),
                           ),
                         ],
@@ -323,20 +323,20 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
                               onPressed: null, // Vô hiệu hóa
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.grey,
-                                padding: EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
                               ),
-                              child: Text('Gọi cho khách'),
+                              child: const Text('Gọi cho khách'),
                             ),
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: ElevatedButton(
                               onPressed: null, // Vô hiệu hóa
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.grey,
-                                padding: EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
                               ),
-                              child: Text('Gọi cho shipper'),
+                              child: const Text('Gọi cho shipper'),
                             ),
                           ),
                         ],
@@ -353,7 +353,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -369,7 +369,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w500,
               ),
             ),
