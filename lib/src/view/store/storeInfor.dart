@@ -97,7 +97,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       backgroundColor: Colors.white,
@@ -133,7 +133,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     TextField(
                       controller: nameController,
                       decoration: InputDecoration(
@@ -152,7 +152,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9À-ỹ ]')),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: addressController,
                       decoration: InputDecoration(
@@ -171,7 +171,8 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9À-ỹ ]')),
                       ],
                     ),
-                    SizedBox(height: 16),
+
+                    const SizedBox(height: 16),
                     TextField(
                       controller: phoneController,
                       decoration: InputDecoration(
@@ -186,7 +187,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                       ),
                       keyboardType: TextInputType.phone,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: descriptionController,
                       decoration: InputDecoration(
@@ -206,7 +207,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9À-ỹ ]')),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: imageController,
                       decoration: InputDecoration(
@@ -220,7 +221,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         prefixIcon: Icon(Icons.image, color: Colors.orange[700]),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
                       value: status,
                       decoration: InputDecoration(
@@ -245,14 +246,14 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         });
                       },
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange[700],
                           foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -285,7 +286,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text("Cập nhật thông tin thành công!"),
+                                content: const Text("Cập nhật thông tin thành công!"),
                                 backgroundColor: Colors.green[600],
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
@@ -297,7 +298,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             print("Lỗi cập nhật: $e");
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text("Lỗi khi cập nhật thông tin!"),
+                                content: const Text("Lỗi khi cập nhật thông tin!"),
                                 backgroundColor: Colors.red[600],
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
@@ -307,7 +308,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             );
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           "Lưu thay đổi",
                           style: TextStyle(
                             fontSize: 16,
@@ -316,7 +317,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -381,7 +382,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
               size: 60,
               color: Colors.red[600],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               errorMessage!,
               style: TextStyle(
@@ -442,25 +443,25 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
               ),
               title: Text(
                 store!.name,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
               ),
-              titlePadding: EdgeInsets.only(left: 16, bottom: 16),
+              titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
             ),
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -472,7 +473,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           color: Colors.grey[900],
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -481,7 +482,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             color: Colors.orange[700],
                             size: 24,
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               store!.address,
@@ -494,7 +495,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -503,7 +504,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             color: Colors.orange[700],
                             size: 24,
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           Text(
                             store!.phoneNumber,
                             style: TextStyle(
@@ -513,7 +514,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -522,7 +523,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             color: Colors.orange[700],
                             size: 24,
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           Text(
                             store!.rating.toStringAsFixed(1),
                             style: TextStyle(
@@ -533,11 +534,11 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Chip(
                         label: Text(
                           store!.status.capitalize(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
@@ -546,7 +547,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         backgroundColor: store!.status == 'open'
                             ? Colors.green[600]
                             : Colors.red[600],
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,
                         ),
@@ -554,7 +555,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       Text(
                         "Mô tả cửa hàng",
                         style: TextStyle(
@@ -563,7 +564,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           color: Colors.grey[900],
                         ),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Text(
                         store!.description.isEmpty
                             ? "Chưa có mô tả"
@@ -574,7 +575,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           height: 1.5,
                         ),
                       ),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                     ],
                   ),
                 ),
