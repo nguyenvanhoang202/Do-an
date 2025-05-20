@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_application_2/src/view/store/selectLocal.dart';
+import 'package:flutter_application_2/src/view/map/selectLocal.dart';
 import '../../model/store.dart';
 import 'package:flutter/services.dart';
 
