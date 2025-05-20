@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_application_2/src/view/store/selectLocal.dart';
 import '../../model/store.dart';
 import 'package:flutter/services.dart';
+
 
 class StoreInfoScreen extends StatefulWidget {
   @override
@@ -171,7 +173,6 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9À-ỹ ]')),
                       ],
                     ),
-
                     const SizedBox(height: 16),
                     TextField(
                       controller: phoneController,
@@ -328,6 +329,15 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
     );
   }
 
+  void _updateLocation() {
+    if (store == null) return;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => SelectLocation(storeId: store!.id),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -360,6 +370,11 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
             icon: Icon(Icons.edit, color: Colors.orange[700]),
             onPressed: _showEditForm,
             tooltip: "Chỉnh sửa",
+          ),
+          IconButton(
+            icon: Icon(Icons.edit_location, color: Colors.orange[700]),
+            onPressed: _updateLocation,
+            tooltip: "Cập nhật vị trí",
           ),
         ]
             : null,
