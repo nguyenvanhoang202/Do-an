@@ -29,7 +29,7 @@ class _SelectLocationState extends State<SelectLocation> {
     super.initState();
     _getCurrentLocation();
   }
-
+  //yêu cầu quyền truy cập vị trí, lấy vị trí hiện tại, cập nhật marker và di chuyển bản đồ.
   Future<void> _getCurrentLocation() async {
     if (_isLoading) return;
 
@@ -82,7 +82,7 @@ class _SelectLocationState extends State<SelectLocation> {
       });
     }
   }
-
+  //Xử lý khi chạm vào bản đồ, cập nhật vị trí được chọn và marker.
   void _handleTapMap(TapPosition tapPosition, LatLng point) {
     if (!mounted) return;
     setState(() {
@@ -102,7 +102,7 @@ class _SelectLocationState extends State<SelectLocation> {
       );
     });
   }
-
+  // Lưu tọa độ vị trí được chọn vào Firebase
   Future<void> _saveLocation() async {
     if (_selectedLocation == null) return;
 

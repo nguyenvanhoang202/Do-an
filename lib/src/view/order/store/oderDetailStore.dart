@@ -24,7 +24,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
     super.initState();
     _loadOrderData();
   }
-
+  // load orderitem, lấy chi tiết các thông tin sản phẩm, khách hàng
   Future<void> _loadOrderData() async {
     try {
       // Load order items
@@ -74,7 +74,7 @@ class _StoreOrderDetailScreenState extends State<StoreOrderDetailScreen> {
       setState(() => _isLoading = false);
     }
   }
-
+  //hiển thị thông báo khi trạng thái thay đổi
   Future<void> _updateOrderStatus(String newStatus) async {
     try {
       await _database

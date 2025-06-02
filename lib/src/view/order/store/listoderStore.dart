@@ -12,7 +12,8 @@ class StoreOrdersScreen extends StatefulWidget {
   _StoreOrdersScreenState createState() => _StoreOrdersScreenState();
 }
 
-class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTickerProviderStateMixin {
+class _StoreOrdersScreenState extends State<StoreOrdersScreen>
+    with SingleTickerProviderStateMixin {
   final _database = FirebaseDatabase.instance.ref();
   final _auth = FirebaseAuth.instance;
   late TabController _tabController;
@@ -22,7 +23,7 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
   List<Order> _completedOrders = [];
   List<Order> _canceledOrders = [];
   String? _storeId;
-
+  bool _isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -36,6 +37,7 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
     super.dispose();
   }
 
+// lấy storeid, rồi load các đơn hàng
   void _loadStoreId() async {
     final userId = _auth.currentUser?.uid;
     if (userId == null) return;
@@ -49,9 +51,10 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
     }
   }
 
+  // lấy dữ liệu người dùng và cửa hàng, tạo danh sách đơn hàng
   void _loadOrders() {
     if (_storeId == null) return;
-
+    setState(() => _isLoading = true);
     _database
         .child('orders')
         .orderByChild('storeId')
@@ -60,6 +63,7 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
         .listen((event) async {
       if (event.snapshot.value == null) {
         _clearOrders();
+        setState(() => _isLoading = false);
         return;
       }
 
@@ -119,9 +123,11 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
                   status: orderData['status']?.toString() ?? 'mới',
                   paymentMethod: PaymentMethod.cashOnDelivery,
                   totalAmount: (orderData['totalAmount'] as num).toDouble(),
-                  shippingFee: (orderData['shippingFee'] as num?)?.toDouble() ?? 0.0,
+                  shippingFee:
+                      (orderData['shippingFee'] as num?)?.toDouble() ?? 0.0,
                   recipientName: orderData['recipientName']?.toString() ?? '',
-                  recipientAddress: orderData['recipientAddress']?.toString() ?? '',
+                  recipientAddress:
+                      orderData['recipientAddress']?.toString() ?? '',
                   createdAt: orderData['createdAt'] as int,
                 );
                 loadedOrders.add(order);
@@ -134,25 +140,34 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
 
         loadedOrders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
         _categorizeOrders(loadedOrders);
+        setState(() => _isLoading = false);
       } catch (e) {
         print('Error loading orders: $e');
         _clearOrders();
+        setState(() => _isLoading = false);
       }
     });
   }
 
+// Phân loại đơn hàng vào các danh mục
   void _categorizeOrders(List<Order> orders) {
     setState(() {
       _allOrders = orders;
-      _newOrders = orders.where((o) => o.status.toLowerCase() == 'mới').toList();
-      _receivedOrders = orders.where((o) =>
-      o.status.toLowerCase() == 'đang xử lý' ||
-          o.status.toLowerCase() == 'đang giao').toList();
-      _completedOrders = orders.where((o) => o.status.toLowerCase() == 'đã giao').toList();
-      _canceledOrders = orders.where((o) => o.status.toLowerCase() == 'đã hủy').toList();
+      _newOrders =
+          orders.where((o) => o.status.toLowerCase() == 'mới').toList();
+      _receivedOrders = orders
+          .where((o) =>
+              o.status.toLowerCase() == 'đang xử lý' ||
+              o.status.toLowerCase() == 'đang giao')
+          .toList();
+      _completedOrders =
+          orders.where((o) => o.status.toLowerCase() == 'đã giao').toList();
+      _canceledOrders =
+          orders.where((o) => o.status.toLowerCase() == 'đã hủy').toList();
     });
   }
 
+  //Xóa tất cả danh sách đơn hàng khi không có dữ liệu
   void _clearOrders() {
     setState(() {
       _allOrders = [];
@@ -163,6 +178,7 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
     });
   }
 
+  // thông báo cập nhật trạng thái đơn trên firebase
   Future<void> _updateOrderStatus(String orderId, String newStatus) async {
     try {
       await _database.child('orders/$orderId/status').set(newStatus);
@@ -176,6 +192,7 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
     }
   }
 
+  // giao diện hiển thị danh sách đơn hàng, chi tiết đơn hàng
   Widget _buildOrderList(List<Order> orders, {bool showActions = false}) {
     if (orders.isEmpty) {
       return const Center(
@@ -224,7 +241,8 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
                     trailing: Chip(
                       label: Text(
                         order.status,
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
                       ),
                       backgroundColor: statusColor,
                     ),
@@ -250,6 +268,7 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
     );
   }
 
+//  xét màu cho các status
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'đã giao':
@@ -267,6 +286,7 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
     }
   }
 
+// xét icon cho các status
   IconData _getStatusIcon(String status) {
     switch (status.toLowerCase()) {
       case 'đã giao':
@@ -284,12 +304,17 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
     }
   }
 
+  // giao diện chính
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Quản lý đơn hàng', style: TextStyle(color: Colors.black87)),
+        title: const Text('Quản lý đơn hàng',
+            style: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+            )),
         backgroundColor: Colors.grey[100],
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black87),
@@ -305,28 +330,42 @@ class _StoreOrdersScreenState extends State<StoreOrdersScreen> with SingleTicker
               labelColor: Colors.black87,
               unselectedLabelColor: Colors.grey[600],
               indicatorWeight: 3,
-              tabs: [
-                const Tab(icon: Icon(Icons.access_time, size: 20), text: 'Mới'),
-                const Tab(icon: Icon(Icons.inventory, size: 20), text: 'Đã nhận'),
-                const Tab(icon: Icon(Icons.check_circle, size: 20), text: 'Hoàn thành'),
-                const Tab(icon: Icon(Icons.cancel, size: 20), text: 'Đã hủy'),
+              tabs: const [
+                Tab(
+                    icon: Icon(Icons.access_time, size: 20),
+                    child: Text('Mới',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Tab(
+                    icon: Icon(Icons.inventory, size: 20),
+                    child: Text('Đã nhận',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Tab(
+                    icon: Icon(Icons.check_circle, size: 20),
+                    child: Text('Đã giao',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Tab(
+                    icon: Icon(Icons.cancel, size: 20),
+                    child: Text('Đã hủy',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
               ],
             ),
           ),
         ),
       ),
-      body: Container(
-        color: Colors.grey[100],
-        child: TabBarView(
-          controller: _tabController,
-          children: [
-            _buildOrderList(_newOrders, showActions: true),
-            _buildOrderList(_receivedOrders),
-            _buildOrderList(_completedOrders),
-            _buildOrderList(_canceledOrders),
-          ],
-        ),
-      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Container(
+              color: Colors.grey[100],
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildOrderList(_newOrders, showActions: true),
+                  _buildOrderList(_receivedOrders),
+                  _buildOrderList(_completedOrders),
+                  _buildOrderList(_canceledOrders),
+                ],
+              ),
+            ),
     );
   }
 }

@@ -34,7 +34,7 @@ class _RegisterScreenState extends State<Register> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-
+  //Xử lý đăng ký, kiểm tra dữ liệu nhập, gọi AuthBloc để đăng ký và điều hướng.
   void _register() {
     setState(() {
       _nameError = _emailError = _phoneError = _passError = _confirmPassError = null;

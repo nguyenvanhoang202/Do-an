@@ -28,7 +28,7 @@ class _LoginScreenState extends State<Login> {
     super.initState();
     _loadSavedCredentials();
   }
-
+// Tải tên người dùng và mật khẩu đã lưu từ SharedPreferences nếu có.
   Future<void> _loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<Login> {
       }
     });
   }
-
+  //Lưu hoặc xóa thông tin đăng nhập vào SharedPreferences dựa trên trạng thái checkbox.
   Future<void> _saveCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     if (isChecked) {
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<Login> {
       await prefs.setBool(REMEMBER_KEY, false);
     }
   }
-
+  // báo lỗi khi đăng nhập thất bại
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -61,7 +61,7 @@ class _LoginScreenState extends State<Login> {
       ),
     );
   }
-
+  //Xử lý đăng nhập, kiểm tra thông tin, gọi Firebase Auth
   void _login() async {
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
       _showError('Vui lòng nhập đầy đủ thông tin');

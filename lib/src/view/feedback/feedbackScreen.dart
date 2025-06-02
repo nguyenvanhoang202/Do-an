@@ -34,7 +34,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       _contentControllers[item['name']] = TextEditingController();
     }
   }
-
+  // xử lý chọn ảnh từ thư viện
   Future<void> _pickImage(String productName) async {
     try {
       final XFile? pickedFile = await _imagePicker.pickImage(
@@ -70,7 +70,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       );
     }
   }
-
+  // Gửi đánh giá lên Firebase, cập nhật rating.
   Future<void> _submitFeedback() async {
     if (_isSubmitting) return;
     setState(() => _isSubmitting = true);

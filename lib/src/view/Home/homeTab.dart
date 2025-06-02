@@ -47,7 +47,7 @@ class _HomeTabState extends State<HomeTab> {
     super.dispose();
   }
 
-  // Thêm hàm tìm kiếm
+  // Xử lý tìm kiếm
   void _searchProducts(String query) {
     setState(() {
       if (query.isEmpty) {
@@ -83,7 +83,7 @@ class _HomeTabState extends State<HomeTab> {
     });
   }
 
-  // Sửa lại phần search bar trong build method
+  // giao diện thanh tìm kiếm
   Widget _buildSearchBar() {
     return Container(
       padding: const EdgeInsets.all(16.0),
@@ -110,7 +110,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  // Sửa lại phần build chính để hiển thị kết quả tìm kiếm
+  // giao diện chính hometab
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -229,7 +229,7 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
-
+  // load dữ liệu từ firebase
   Future<void> _loadData() async {
     try {
       setState(() {
@@ -368,7 +368,7 @@ class _HomeTabState extends State<HomeTab> {
       }
     }
   }
-
+  // hiển thị bản đồ
   void _showLocationPicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -381,7 +381,7 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
-
+  // thanh app bar
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       elevation: 0,
@@ -443,7 +443,7 @@ class _HomeTabState extends State<HomeTab> {
       ],
     );
   }
-
+  // giao diện danh mục
   Widget _buildCategoryItem(Category category) {
     return GestureDetector(
       onTap: () {
@@ -496,7 +496,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
 // Add this method to the _HomeTabState class
-
+  // giao diện mục cửa hàng
   Widget _buildStoreItem(Store store) {
     return GestureDetector(
       onTap: () {
@@ -627,8 +627,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-// Update the build method in _HomeTabState to include the stores section
-// Add this section between Categories and Popular Products:
+  // giao diện mục sản phẩm
   Widget _buildProductItem(Product product) {
     return GestureDetector(
       onTap: () {
@@ -744,7 +743,7 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
-
+// thanh danh mục
   Widget _buildCategories() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -773,7 +772,7 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
-
+  // cửa hàng nổi bật
   Widget _buildStores() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -802,7 +801,7 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
-
+  //sản phẩm phổ biến
   Widget _buildPopularProducts() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),

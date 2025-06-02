@@ -50,7 +50,7 @@ class _FavoritesTabState extends State<FavoritesTab> with SingleTickerProviderSt
     _controller.dispose();
     super.dispose();
   }
-
+  // Kiểm tra đăng nhập
   Future<void> _loadFavoriteStores() async {
     try {
       setState(() {
@@ -67,7 +67,7 @@ class _FavoritesTabState extends State<FavoritesTab> with SingleTickerProviderSt
         return;
       }
 
-      // Get favorites for current user
+      // lấy node favorites cho user hiện tại
       final favoritesSnapshot = await _database
           .child('favorites')
           .orderByChild('userId')
@@ -82,7 +82,7 @@ class _FavoritesTabState extends State<FavoritesTab> with SingleTickerProviderSt
         return;
       }
 
-      // Get all stores data
+      // Lấy tất cả dữ liệu của store
       final storesSnapshot = await _database.child('stores').get();
       if (!storesSnapshot.exists || storesSnapshot.value == null) {
         setState(() {
@@ -95,7 +95,7 @@ class _FavoritesTabState extends State<FavoritesTab> with SingleTickerProviderSt
       final storesData = Map<String, dynamic>.from(storesSnapshot.value as Map);
       final favoritesData = Map<String, dynamic>.from(favoritesSnapshot.value as Map);
 
-      // Create list of favorite stores
+      // Tạo danh sách các cửa hàng yêu thích
       final List<Store> stores = [];
       for (var favorite in favoritesData.values) {
         final String storeId = favorite['storeId'] as String;

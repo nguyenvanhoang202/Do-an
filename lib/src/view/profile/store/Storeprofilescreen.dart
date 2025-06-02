@@ -25,7 +25,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
     super.initState();
     _loadUserData();
   }
-
+  // thông báo lỗi
   void _showErrorMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -38,7 +38,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
       ),
     );
   }
-
+  // load thông tin người dùng
   Future<void> _loadUserData() async {
     try {
       setState(() => _isLoading = true);
@@ -60,7 +60,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
       _showErrorMessage('Lỗi khi tải thông tin: ${error.toString()}');
     }
   }
-
+  // xử lý sửa thông tin
   Future<void> _showEditProfileDialog() async {
     final TextEditingController nameController = TextEditingController(text: _userData?['name']);
     final TextEditingController phoneController = TextEditingController(text: _userData?['phone']);
@@ -68,7 +68,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
     String? selectedGender = _userDetails?['gioitinh'];
     String? selectedDate = _userDetails?['date'];
     bool isLoading = false;
-
+    // giao diện sửa thông tin
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -293,7 +293,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
       },
     );
   }
-
+  // xử lý đổi mật khẩu và giao diện
   Future<void> _showChangePasswordDialog() async {
     final TextEditingController currentPassController = TextEditingController();
     final TextEditingController newPassController = TextEditingController();
@@ -462,7 +462,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
       },
     );
   }
-
+// đăng xuất
   Future<bool?> _showLogoutConfirmDialog() {
     return showDialog<bool>(
       context: context,
@@ -509,7 +509,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
       ),
     );
   }
-
+  // điều hướng về đăng nhập
   Future<void> _handleLogout() async {
     await _auth.signOut();
     Navigator.of(context).pushAndRemoveUntil(

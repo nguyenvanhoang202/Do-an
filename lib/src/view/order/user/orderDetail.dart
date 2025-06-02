@@ -18,11 +18,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   final _database = FirebaseDatabase.instance.ref();
   List<Map<String, dynamic>> orderItems = [];
   bool _isLoading = true;
+  bool _hasFeedback = false;
+  String? _feedbackId;
 
   @override
   void initState() {
     super.initState();
     _loadOrderItems();
+    _checkExistingFeedback();
   }
 
   Future<void> _loadOrderItems() async {
@@ -64,6 +67,26 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     }
   }
 
+  Future<void> _checkExistingFeedback() async {
+    try {
+      final snapshot = await _database
+          .child('feedbacks')
+          .orderByChild('orderId')
+          .equalTo(widget.order.id)
+          .get();
+
+      if (snapshot.value != null) {
+        final feedbacks = snapshot.value as Map<dynamic, dynamic>;
+        setState(() {
+          _hasFeedback = true;
+          _feedbackId = feedbacks.keys.first.toString();
+        });
+      }
+    } catch (e) {
+      print('Error checking feedback: $e');
+    }
+  }
+
   Future<void> _updateOrderStatus(String newStatus) async {
     try {
       await _database.child('orders/${widget.order.id}/status').set(newStatus);
@@ -94,6 +117,18 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     }
   }
 
+  void _navigateToFeedback() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FeedbackScreen(
+          order: widget.order,
+          orderItems: orderItems,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,7 +142,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Thông tin cửa hàng
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -128,10 +162,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // Thông tin đơn hàng
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -158,10 +189,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // Thông tin giao hàng
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -184,10 +212,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // Chi tiết sản phẩm
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -251,10 +276,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 20),
-
-            // Nút hành động
             if (widget.order.status == 'mới' || widget.order.status == 'đang xử lý')
               OutlinedButton(
                 onPressed: () => _updateOrderStatus('đã hủy'),
@@ -287,6 +309,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     ),
                   ),
                 ],
+              ),
+            if (widget.order.status == 'đã giao')
+              ElevatedButton(
+                onPressed: _navigateToFeedback,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 48),
+                ),
+                child: Text(
+                  _hasFeedback ? 'Sửa đánh giá' : 'Đánh giá đơn hàng',
+                  style: const TextStyle(fontSize: 16),
+                ),
               ),
           ],
         ),

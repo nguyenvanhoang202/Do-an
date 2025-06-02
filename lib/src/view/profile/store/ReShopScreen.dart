@@ -405,7 +405,7 @@ class _RegisterShopScreenState extends State<RegisterShopScreen> {
       },
     );
   }
-
+  // xử lý đăng ký cửa hàng mới
   Future<void> _registerNewStore() async {
     if (_storeNameController.text.trim().isEmpty) {
       _showError('Vui lòng nhập tên cửa hàng');
@@ -448,7 +448,7 @@ class _RegisterShopScreenState extends State<RegisterShopScreen> {
       _showError(error.toString());
     }
   }
-
+  // xử lý đăng ký quản lý cửa hàng có sẵn
   Future<void> _registerExistingStore() async {
     if (_storeIdController.text.trim().isEmpty) {
       _showError('Vui lòng nhập Store ID');
@@ -478,7 +478,7 @@ class _RegisterShopScreenState extends State<RegisterShopScreen> {
       _showError(error.toString());
     }
   }
-
+  // thông báo
   void _showSuccessDialog() {
     showDialog(
       context: context,
@@ -537,7 +537,7 @@ class _RegisterShopScreenState extends State<RegisterShopScreen> {
       },
     );
   }
-
+// thông báo lỗi
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

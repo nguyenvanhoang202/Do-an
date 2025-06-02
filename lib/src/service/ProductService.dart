@@ -13,7 +13,7 @@ class ProductService {
   final Map<String, Store> _storeCache = {};
   final Map<String, Category> _categoryCache = {};
   final Map<String, User> _userCache = {};
-
+//Lấy thông tin người dùng từ Firebase dựa trên userId.
   Future<User> _getUser(String userId) async {
     if (_userCache.containsKey(userId)) {
       return _userCache[userId]!;
@@ -26,7 +26,7 @@ class ProductService {
     _userCache[userId] = user;
     return user;
   }
-
+//Trả về Stream product theo thời gian thực từ Firebase.
   Stream<Product> getProductStream(String productId) {
     print('ProductService - Getting product stream for ID: $productId');
     
@@ -103,7 +103,7 @@ class ProductService {
       );
     }).asyncMap((future) => future);
   }
-
+  //Trả về Stream danh sách phản hồi của sản phẩm.
   Stream<List<FeedbackModel.Feedback>> getProductFeedbacks(String productId) {
     return _dbRef
         .child('feedbacks')
@@ -140,7 +140,7 @@ class ProductService {
       return feedbacks;
     }).asyncMap((future) => future);
   }
-
+  // Trả về Stream danh sách bình luận.
   Stream<List<FeedbackComment>> getFeedbackComments(String feedbackId) {
     return _dbRef
         .child('feedback_comments')
@@ -177,7 +177,7 @@ class ProductService {
       return comments;
     }).asyncMap((future) => future);
   }
-
+  //Lấy thông tin cửa hàng từ Firebase, dùng cache.
   Future<Store> _getStore(String storeId) async {
     if (_storeCache.containsKey(storeId)) {
       return _storeCache[storeId]!;
@@ -193,7 +193,7 @@ class ProductService {
     _storeCache[storeId] = store;
     return store;
   }
-
+  //Lấy thông tin danh mục từ Firebase, dùng cache.
   Future<Category> _getCategory(String categoryId) async {
     if (_categoryCache.containsKey(categoryId)) {
       return _categoryCache[categoryId]!;
@@ -209,7 +209,7 @@ class ProductService {
     _categoryCache[categoryId] = category;
     return category;
   }
-
+  //Lấy chi tiết sản phẩm từ Firebase, dựa theo cửa hàng và danh mục.
   Future<Product> _getProduct(String productId) async {
     final snapshot = await _dbRef.child('products/$productId').get();
     if (snapshot.value == null) {
@@ -226,7 +226,7 @@ class ProductService {
       <String, Category>{category.id: category},
     );
   }
-
+  //Lấy chi tiết phản hồi từ Firebase, kết hợp người dùng và sản phẩm.
   Future<FeedbackModel.Feedback> _getFeedback(String feedbackId) async {
     final snapshot = await _dbRef.child('feedbacks/$feedbackId').get();
     if (snapshot.value == null) {
@@ -243,7 +243,7 @@ class ProductService {
       <String, Product>{product.id: product},
     );
   }
-
+  //Lấy chi tiết sản phẩm từ Firebase, xử lý dữ liệu null.
   Future<Product> getProduct(String productId) async {
     try {
       print('Getting product with ID: $productId'); // Debug log
