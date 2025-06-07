@@ -9,7 +9,7 @@ import 'package:path/path.dart' as path;
 import '../../account/Login_view.dart';
 import 'package:intl/intl.dart';
 import '../../../model/feedback.dart' as FeedbackModel;
-import '../store/ReShopScreen.dart';
+import '../store/ReStoreScreen.dart';
 
 class UserProfileScreen extends StatefulWidget {
   @override

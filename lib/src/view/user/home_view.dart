@@ -33,7 +33,7 @@ class _FoodHomePageState extends State<FoodHomePage> with SingleTickerProviderSt
       body: TabBarView(
         controller: _tabController,
         children: [
-          HomeTab(),
+          const HomeTab(),
           OrdersTab(),
           FavoritesTab(),
           NotificationsTab(),

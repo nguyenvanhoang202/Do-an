@@ -6,6 +6,8 @@ import '../../../model/user.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
+import '../../user/home_view.dart';
+
 class CheckoutScreen extends StatefulWidget {
   final Cart cart;
   final List<CartItem> cartItems;
@@ -98,7 +100,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         const SnackBar(content: Text('Đặt hàng thành công!')),
       );
 
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => FoodHomePage()),
+            (route) => false,
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Lỗi: ${e.toString()}')),

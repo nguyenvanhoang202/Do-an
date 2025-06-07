@@ -32,7 +32,7 @@ class _StoreHomePageState extends State<StoreHomePage> with SingleTickerProvider
         controller: _tabController,
         children: [
           StoreInfoScreen(),
-          ProductListScreen(),
+          const ProductListScreen(),
           StoreOrdersScreen(),
           RevenueStatisticsScreen(),
           StoreProfileScreen(),

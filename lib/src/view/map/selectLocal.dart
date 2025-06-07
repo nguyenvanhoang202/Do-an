@@ -40,6 +40,15 @@ class _SelectLocationState extends State<SelectLocation> {
     final permission = await Permission.location.request();
 
     if (permission.isGranted) {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await Geolocator.openLocationSettings();
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
       try {
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
@@ -67,7 +76,10 @@ class _SelectLocationState extends State<SelectLocation> {
           _isLoading = false;
         });
 
-        _mapController.move(location, 15); // Di chuyển bản đồ đến vị trí mới
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _mapController.move(location, 15);
+        });
+
       } catch (e) {
         debugPrint('Lỗi khi lấy vị trí: $e');
         if (!mounted) return;
